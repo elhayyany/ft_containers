@@ -1,0 +1,29 @@
+{
+    "files.associations": {
+        "vector": "cpp",
+        "stack": "cpp",
+        "map": "cpp",
+        "set": "cpp",
+        "iosfwd": "cpp",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp",
+        "atomic": "cpp",
+        "deque": "cpp",
+        "ios": "cpp",
+        "string": "cpp",
+        "system_error": "cpp",
+        "unordered_map": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp",
+        "memory": "cpp",
+        "__config": "cpp",
+        "__functional_03": "cpp",
+        "__node_handle": "cpp",
+        "memory_resource": "cpp",
+        "functional": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "iterator": "cpp"
+    }
+}

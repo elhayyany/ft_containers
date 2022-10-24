@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 18:26:39 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/24 09:17:28 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/24 12:34:52 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,26 @@ public:
 	vector_iterator()
 	{
 	}
+	vector_iterator(pointer me)
+	{
+		ptr = me;
+	}
 	~vector_iterator()
 	{
 	}
-
+	vector_iterator operator++(int)
+	{
+	}
+	vector_iterator operator++()
+	{
+	}
+	vector_iterator operator--(int)
+	{
+	}
+	vector_iterator operator--()
+	{
+	}
 private:
 	pointer		ptr;
-	reference	ref;
 };
 }

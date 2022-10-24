@@ -6,12 +6,12 @@
 #    By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 11:59:54 by ael-hayy          #+#    #+#              #
-#    Updated: 2022/10/24 09:38:06 by ael-hayy         ###   ########.fr        #
+#    Updated: 2022/10/24 11:32:09 by ael-hayy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS = test.cpp
-FLAGS =  -std=c++98 -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror  -std=c++98 -g -fsanitize=address
 CC = c++
 NAME = container
 OBJS = $(SRCS:.cpp=.o)

@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:03:55 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/12 18:17:14 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/18 15:29:43 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,22 @@
 #include <algorithm>
 #include <iostream>
 
+class p{
+    public:
+    typedef int INTEGER;
+};
 
+template<typename T>class p2{
+    public:
+    p2(){}
+    typedef typename T::INTEGER *ptr;
+};
 
 int main()
 {
-
+    int a = 10;
+    p2<p>::ptr l = &a;
+    std::cout<<*l<<"\n";
     // net *h = & networking;
     // // std :: cout << networking.a;
     // networking.setter(68767687);

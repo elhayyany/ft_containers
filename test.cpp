@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/24 17:45:27 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/25 15:51:51 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,27 @@
 #include <string>
 #include <vector>
 // #include <algorithm>
-// #include "vector.hpp"
+#include "vector.hpp"
 // #include "set.hpp"
 // #include "map.hpp"
 // #include "stack.hpp"
 #include <iostream>
+struct m
+{
+   int *i;
+   m(){i = new int(3);}
+};
+
 int main()
 {
-   // std::vector<int> l(14, 5);
-   std::vector<int> o(5, 8);
-   o.push_back(9);
-   std::vector<int> l(o);
-   // o = l;
-   std::cout<<l.capacity()<< "  "<<l.size()<<std::endl;
-   for (std::vector<int>::iterator it = l.begin(); it != l.end(); it++)
+  
+   std::vector<m> a;
+   for (size_t i = 0; i < 5; i++)
+      a.push_back(m());
+   a.assign(3, m());
+   for (auto s : a)
    {
-      std::cout<<*it;
+      std::cout<<"a\n";
    }
-      
+   
 }

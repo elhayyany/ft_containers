@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/25 15:51:51 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/26 14:36:41 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,22 @@
 // #include "map.hpp"
 // #include "stack.hpp"
 #include <iostream>
-struct m
-{
-   int *i;
-   m(){i = new int(3);}
-};
+
 
 int main()
 {
   
-   std::vector<m> a;
-   for (size_t i = 0; i < 5; i++)
-      a.push_back(m());
-   a.assign(3, m());
-   for (auto s : a)
+   std::vector<int> a(9, 9);
+   // a.push_back(0);
+   a.clear();
+   std::cout<<a.capacity()<<std::endl;
+   try
    {
-      std::cout<<"a\n";
+   std::cout<<a.at(0);
+      /* code */
    }
-   
+   catch(const std::exception& e)
+   {
+      std::cerr << e.what() << '\n';
+   }
 }

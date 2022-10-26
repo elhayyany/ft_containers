@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/25 15:47:24 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/26 14:45:44 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,48 @@ size_type		_capacity;
 pointer			_arr;
 allocator_type	_allocator;
 
-
+void	destroy(pointer _to_destroy, size_type count)
+{
+	for(size_t i = 0; i < count; i++)
+		_allocator.destroy(_to_destroy + i);
+}
+void	construct(pointer _to_construct, size_type count, const_reference value)
+{
+	for(size_t i = 0; i < count; i++)
+		_allocator.construct(_to_construct + i, value);
+}
+void	construct(pointer _to_construct, size_type count, pointer value)
+{
+	for(size_t i = 0; i < count; i++)
+		_allocator.construct(_to_construct + i, *(value + i));
+}
 public:
+
+	// Iterator
+
+
+	iterator begin();
+	const_iterator begin() const;
+
+
+	// Member functions !!!
+
+
 	vector():_size(0), _capacity(0), _arr(0), _allocator(allocator_type()) {};
 	explicit vector( size_type count, const T& value = T(), const Allocator& alloc = Allocator()): _allocator(alloc)
 	{
 		if (count > _allocator.max_size())
 			throw std::length_error("vector");
 		_arr = _allocator.allocate(count);
-		for (size_type i = 0; i < count; i++)
-			_allocator.construct(_arr + i, value);
+		construct(_arr, count, value);
 		_size = count;
 		_capacity = count;
-
 	}
-	reference	front() {return (*_arr);}
-	const_reference front() const {return (*_arr);}
-	size_type size() const {return _size; };
+
 	vector( const vector& other )
 	{
 		_arr = _allocator.allocate(other._size);
-		for (size_type i = 0; i < other._size; i++)
-			_allocator.construct(_arr + i, *(other + i));
+		construct(_arr, other._size, other._arr);
 		_size = other._size;
 		_capacity = other._size;
 	}
@@ -73,28 +93,89 @@ public:
 	~vector()
 	{
 		if (_arr)
+		{
+			destroy(_arr, _size);
 			_allocator.deallocate(_arr, _capacity);
+		}
 	}
 	vector& operator=( const vector& other )
 	{
+		destroy(_arr, _size);
 		if (_arr && _capacity < other._size)
 		{
-			for(size_t i = 0; i < _size; i++)
-				_allocator.destroy(_arr + i);
 			_allocator.diallocate(_arr, _size);
+			_capacity = other._size;
 			_arr = 0;
 		}
 		if (!_arr)
 			_arr = _allocator.allocatte(other._size);
-		for (size_t i = 0; i < other._size; i++)
-			_allocator.construct(other._arr + i);
+		construct(_arr, other._size, other._arr);
+		_size = other._size;
 		return (*this);
 	}
+	void assign( size_type count, const T& value )
+	{
+		if (count > _allocator.max_size())
+			throw std::length_error("vector");
+		destroy(_arr, _size);
+		if (_capacity < count)
+		{
+			_arr = _allocator.allocate(count);
+			_capacity = count;
+		}
+		construct(_arr, count, value);
+		_size = count;
+	}
+	allocator_type get_allocator() const {return (_allocator);};
 
-	// allocator_type get_allocator() const;
-	// reference at( size_type pos );
-	// reference operator[]( size_type pos );
 
+	// Element access
+
+
+	reference at( size_type pos )
+	{
+		if (pos >= _size )
+			throw std::out_of_range("vector");
+		return (*(_arr + pos));
+	}
+	const_reference at( size_type pos ) const
+	{
+		if (pos >= _size)
+			throw std::out_of_range("vector");
+		return (*(_arr + pos));
+	}
+	reference operator[]( size_type pos )
+	{
+		return (*(_arr + pos));
+	}
+	const_reference operator[]( size_type pos ) const
+	{
+		return (*(_arr + pos));
+	}
+	reference back() {return (*(_arr + _size - 1));}
+	const_reference back() const {return (*(_arr + _size - 1));}
+	reference	front() {return (*_arr);}
+	const_reference front() const {return (*_arr);}
+
+
+
+	//! Capacity
+
+
+	bool empty() const {return (!_size);}
+	size_type size() const {return (_size);}
+	size_type max_size() const {return (_allocator.max_size());}
+	size_type capacity() const {return (_capacity);}
+	
+
+	//Modifiersgit 
+
+
+	void clear()
+	{
+		destroy(_arr, _size);
+		_size = 0;
+	}
 };
 }
 #endif

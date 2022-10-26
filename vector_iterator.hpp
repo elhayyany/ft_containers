@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 18:26:39 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/24 12:34:52 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/26 15:24:00 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,42 @@ public:
 	}
 	vector_iterator(pointer me)
 	{
-		ptr = me;
+		_ptr = me;
 	}
 	~vector_iterator()
 	{
 	}
-	vector_iterator operator++(int)
+	vector_iterator vector_iterator operator++(int)
 	{
+		vector_iterator tem;
+
+		tem = *this;
+		_ptr++;
+		return tem;
 	}
-	vector_iterator operator++()
+	vector_iterator vector_iterator operator=(vector_iterator& other)
 	{
+		_ptr = other._ptr;
 	}
-	vector_iterator operator--(int)
+	vector_iterator& vector_iterator operator++()
 	{
+		_ptr++;
+		return (*this);
 	}
-	vector_iterator operator--()
+	vector_iterator vector_iterator operator--(int)
 	{
+		vector_iterator tem;
+
+		tem = *this;
+		_ptr--;
+		return tem;
+	}
+	vector_iterator& vector_iterator operator--()
+	{
+		_ptr--;
+		return (*this);
 	}
 private:
-	pointer		ptr;
+	pointer		_ptr;
 };
 }

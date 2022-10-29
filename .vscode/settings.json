@@ -66,6 +66,7 @@
         "streambuf": "cpp",
         "tuple": "cpp",
         "typeinfo": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "__cxx_version": "cpp"
     }
 }

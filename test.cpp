@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/26 14:36:41 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/28 15:06:42 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,11 @@
 
 int main()
 {
-  
-   std::vector<int> a(9, 9);
-   // a.push_back(0);
-   a.clear();
-   std::cout<<a.capacity()<<std::endl;
-   try
-   {
-   std::cout<<a.at(0);
-      /* code */
-   }
-   catch(const std::exception& e)
-   {
-      std::cerr << e.what() << '\n';
-   }
+	
+	ft::vector<int> a(10, 10);
+	ft::vector<int>::iterator    ap  = a.begin();
+	ap = a.begin();
+	std::cout<<*++ap<<std::endl;
+	
+	
 }

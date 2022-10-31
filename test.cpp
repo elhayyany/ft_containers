@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/30 14:50:08 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/31 10:10:34 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,20 @@ int main()
 
 
 	
-	ft::vector<int> const a;
-	// for (size_t i = 0; i < 20; i++)
+	// ft::vector<int> a(10, 10);
+	// // for (size_t i = 0; i < 7; i++)
+	// // 	a.push_back(i);
+	
+	// ft::vector<int>::reverse_iterator    ap  = a.rbegin();
+	// for (ft::vector<int>::reverse_iterator it = a.rbegin(); it != a.rend(); it++)
 	// {
-	// 	a.push_back(i);
+	// 	std::cout<<*it<<" ";
 	// }
-	ft::vector<int>::const_iterator    ap  = a.begin();
-	// *a.insert(ap, 88) = 9;
-	ap++;
-	// *ap = 3;
-	// for (size_t i = 0; i < 20; i++)
-	// {
-		// std::cout<<*ap;
-	// 	std::cout<<a[1];
-	// 	std::cout<<a[2];
-	// }
+	// ap[0] = 8;
+	// std::cout<<*ap<<" ";
+
+		
+	
 	
 	
 }

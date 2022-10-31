@@ -10,6 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+
+
+#ifndef VECTOR_TERATOR_TRAITS_HPP
+#define VECTOR_TERATOR_TRAITS_HPP
+
 namespace ft
 {
 
@@ -44,3 +49,4 @@ struct iterator_traits<const T*>
 };
 
 }
+#endif

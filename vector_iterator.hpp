@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 18:26:39 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/29 08:17:50 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/30 14:57:12 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ public:
 	{
 		_ptr = nullptr;
 	}
-	// vector_iterator(const vector_iterator& other)
-	// {
-		
-	// }
+	vector_iterator(const vector_iterator& other)
+	{
+		_ptr = other._ptr;	
+	}
 	vector_iterator(pointer me)
 	{
 		_ptr = me;
@@ -74,16 +74,23 @@ public:
 		_ptr--;
 		return (*this);
 	}
-	vector_iterator& operator - (int a)
+	vector_iterator operator - (difference_type a)
 	{
-		_ptr -= a;
-		return (*this);
+		vector_iterator t(_ptr - a);
+		return (t);
 	}
-	vector_iterator& operator + (int a)
+	vector_iterator operator - (vector_iterator& other)
 	{
-		_ptr += a;
-		return (*this);
+		
+		vector_iterator t(_ptr - other._ptr);
+		return (t);
 	}
+	vector_iterator operator + (difference_type a)
+	{
+		vector_iterator t(_ptr + a);
+		return (t);
+	}
+
 	bool operator == (const vector_iterator& other)
 	{
 		return (_ptr == other._ptr);
@@ -112,22 +119,27 @@ public:
 	{
 		return (_ptr >= other._ptr);
 	}
-	void operator += (const int a)
+	void operator += (const difference_type a)
 	{
 		_ptr += a;
 	}
-	void operator -= (const int a)
+	void operator -= (const difference_type a)
 	{
 		_ptr -= a;
 	}
-	reference operator [] (int a)
+	reference operator [] (difference_type a)
 	{
 		return (*(_ptr + a));
 	}
-	
 private:
 	pointer		_ptr;
 };
+	template<typename T>
+	vector_iterator<T> operator + (typename vector_iterator<T>::difference_type a, vector_iterator<T>& t )
+	{
+		vector_iterator<T> k(t + a);
+		return (t);
+	}
 }
 
 

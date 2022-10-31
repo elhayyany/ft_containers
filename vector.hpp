@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/28 10:56:31 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/30 14:33:05 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ public:
 	typedef typename	allocator_type::size_type			size_type;
 	typedef typename	allocator_type::difference_type		difference_type;
 	typedef				vector_iterator<pointer>			iterator;	
+	typedef				vector_iterator<const_pointer>		const_iterator;	
 
 private:
 size_type		_size;
@@ -63,13 +64,12 @@ public:
 
 	iterator begin()
 	{
-		iterator oo(_arr);
-		return oo;
+		return (iterator(_arr));
 	}
-	// const_iterator begin() const
-	// {
-	// 	return (iterator(pointer));
-	// }
+	const_iterator begin() const
+	{
+		return (iterator(_arr));
+	}
 
 
 	// Member functions !!!
@@ -93,9 +93,16 @@ public:
 		_size = other._size;
 		_capacity = other._size;
 	}
-	// template< class InputIt > vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() ): _allocator(alloc)
+	// template< class InputIt > vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() )
+	// 	: _allocator(alloc)
 	// {
-
+	// 	difference_type	a = last - first;
+	// 	std::cout<<a<<std::endl;
+	// 	_arr = _allocator.allocate(a);
+	// 	for(difference_type o = 0; o != a; o++)
+	// 		_allocator.construct(_arr + o, *(first + o));
+	// 	_size = a;
+	// 	_capacity = a;
 	// }
 	~vector()
 	{
@@ -173,8 +180,20 @@ public:
 	size_type size() const {return (_size);}
 	size_type max_size() const {return (_allocator.max_size());}
 	size_type capacity() const {return (_capacity);}
-	void resize(size_type sz, T c = T());
-	void reserve(size_type n);
+	void reserve(size_type n)
+	{
+		if (n > _allocator.max_size())
+			throw std::length_error("vector");
+		if (n > _capacity)
+		{
+			pointer	ptr = _arr;
+			_arr = _allocator.allocate(n);
+			construct(_arr, _size, ptr);
+			destroy(ptr);
+			_allocator.diallocate(ptr, _size);
+			_capacity = n;
+		}
+	}
 
 	//Modifiersgit 
 
@@ -183,11 +202,19 @@ public:
 	{
 		destroy(_arr, _size);
 		_size = 0;
-	}
+	}	
+	// iterator insert (iterator position, const value_type& val)
+	// {
+	// 	iterator	tem = this->begin();
+	// 	while (tem != position)
+	// 		tem++;
+		
+	// }
+    // void insert (iterator position, size_type n, const value_type& val);	
+	// template <class InputIterator>    void insert (iterator position, InputIterator first, InputIterator last);
+	void resize(size_type sz, T c = T());
 	void push_back(const T& x);
 	void pop_back();
-	iterator insert(iterator position, const T& x);
-	void insert(iterator position, size_type n, const T& x);
 	template <class InputIterator> void insert(iterator position, InputIterator first, InputIterator last);
 	iterator erase(iterator position);
 	iterator erase(iterator first, iterator last);
@@ -207,5 +234,3 @@ public:
 }
 
 #endif
-
-

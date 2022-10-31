@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/31 10:28:30 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/31 11:54:49 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,23 +65,14 @@ public:
 	// Iterator
 
 
-	const_iterator begin() const
-	{
-		return (const_iterator(_arr));
-	}
-	iterator begin()
-	{
-		return (iterator(_arr));
-	}
-	reverse_iterator rbegin()
-	{
-		return(reverse_iterator(_arr + _size - 1));
-	}
-	const_reverse_iterator rbegin() const
-	{
-		return(const_reverse_iterator(_arr + _size - 1));
-	}
-
+	const_iterator begin() const { return (const_iterator(_arr)); } 								//! const begin iterator
+	iterator begin() { return (iterator(_arr)); }													//!	begin iterator
+	iterator end() { return (iterator(_arr + _size)); }												//! end iterator 
+	const_iterator end() const { return (const_iterator(_arr + _size)); }							//! const end iterator
+	reverse_iterator rbegin() { return(reverse_iterator(_arr + _size - 1)); }						//! reverse begin iterator
+	const_reverse_iterator rbegin() const { return(const_reverse_iterator(_arr + _size - 1)); }		//! const reverse begin iterator
+	reverse_iterator rend() { return(reverse_iterator(_arr - 1)); }									//! reverse end iterator
+	const_reverse_iterator rend() const { return(const_reverse_iterator(_arr - 1)); }				//! const reverse end iterator
 	// Member functions !!!
 
 
@@ -127,7 +118,7 @@ public:
 		destroy(_arr, _size);
 		if (_arr && _capacity < other._size)
 		{
-			_allocator.diallocate(_arr, _size);
+			_allocator.deallocate(_arr, _size);
 			_capacity = other._size;
 			_arr = 0;
 		}
@@ -199,8 +190,8 @@ public:
 			pointer	ptr = _arr;
 			_arr = _allocator.allocate(n);
 			construct(_arr, _size, ptr);
-			destroy(ptr);
-			_allocator.diallocate(ptr, _size);
+			destroy(ptr, _size);
+			_allocator.deallocate(ptr, _size);
 			_capacity = n;
 		}
 	}
@@ -213,13 +204,17 @@ public:
 		destroy(_arr, _size);
 		_size = 0;
 	}	
-	// iterator insert (iterator position, const value_type& val)
-	// {
-	// 	iterator	tem = this->begin();
-	// 	while (tem != position)
-	// 		tem++;
-		
-	// }
+	iterator insert (iterator position, const value_type& val)
+	{
+		size_type	index = begin() - position;
+		if (_size == _capacity)
+			reserve(_capacity * 2);
+		for (size_t i = _size - 1; i != index; i--)
+			_arr[i + 1] = _arr[i];
+		_arr[index] = val;
+		_size++;
+		return (iterator(_arr + index));
+	}
     // void insert (iterator position, size_type n, const value_type& val);	
 	// template <class InputIterator>    void insert (iterator position, InputIterator first, InputIterator last);
 	void resize(size_type sz, T c = T());

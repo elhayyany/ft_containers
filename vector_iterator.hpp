@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 18:26:39 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/31 10:24:12 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/10/31 11:50:18 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,9 @@ public:
 		vector_iterator t(_ptr - a);
 		return (t);
 	}
-	vector_iterator operator - (vector_iterator& other)
+	difference_type operator - (vector_iterator& other)
 	{
-		
-		vector_iterator t(_ptr - other._ptr);
-		return (t);
+		return (_ptr - other._ptr);
 	}
 	vector_iterator operator + (difference_type a)
 	{
@@ -97,6 +95,10 @@ public:
 	bool operator == (const vector_iterator& other)
 	{
 		return (_ptr == other._ptr);
+	}
+	bool operator != (const vector_iterator& other)
+	{
+		return (_ptr != other._ptr);
 	}
 	vector_iterator& operator - (const vector_iterator& other)
 	{

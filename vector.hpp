@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/31 11:54:49 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/03 15:06:19 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 #include <exception>
 #include "vector_iterator.hpp"
 #include "vector_reverse_iterator.hpp"
+#include "is_integral.hpp"
 namespace ft
 {
 template< class T, class Allocator = std::allocator<T> > 
 class vector
 {
-private:
 
 public:
 	typedef				T											value_type;
@@ -203,19 +203,34 @@ public:
 	{
 		destroy(_arr, _size);
 		_size = 0;
-	}	
+	}
+
+    void insert (iterator position, size_type n, const value_type& val)
+	{
+		size_type	index = begin() - position;
+		if (_size + n > _capacity)
+			reserve(_capacity + n);
+		for (size_t i = _size - 1; i != index; i--)
+			_arr[i + n] = _arr[i];
+		for (size_t i = index; i < index + n; i++)
+			_arr[i] = val;
+		_size = _capacity;
+	}
 	iterator insert (iterator position, const value_type& val)
 	{
 		size_type	index = begin() - position;
-		if (_size == _capacity)
+		std::cout<<index<<std::endl;
+		if (_size == _capacity && _capacity == 0)
+			reserve(1);
+		else if (_size == _capacity)
 			reserve(_capacity * 2);
 		for (size_t i = _size - 1; i != index; i--)
-			_arr[i + 1] = _arr[i];
+			_allocator.construct(_arr + i + 1, *(_arr + i));
+			// _arr[i + 1] = _arr[i];
 		_arr[index] = val;
 		_size++;
 		return (iterator(_arr + index));
 	}
-    // void insert (iterator position, size_type n, const value_type& val);	
 	// template <class InputIterator>    void insert (iterator position, InputIterator first, InputIterator last);
 	void resize(size_type sz, T c = T());
 	void push_back(const T& x);

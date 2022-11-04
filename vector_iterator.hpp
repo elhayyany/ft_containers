@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 18:26:39 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/31 11:50:18 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/03 15:14:05 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ template <class it>
 class vector_iterator
 {
 public:
+	
 	typedef	typename	ft::iterator_traits<it>::value_type							value_type;
 	typedef typename	ft::iterator_traits<it>::pointer							pointer;
 	typedef	typename	ft::iterator_traits<it>::reference							reference;
@@ -35,9 +36,10 @@ public:
 	{
 		_ptr = nullptr;
 	}
-	vector_iterator(const vector_iterator& other)
+	it base() const  {return _ptr;}
+	template<class A> vector_iterator(const vector_iterator<A>& other)
 	{
-		_ptr = other._ptr;	
+		_ptr = other.base();	
 	}
 	vector_iterator(pointer me)
 	{
@@ -46,7 +48,7 @@ public:
 	~vector_iterator()
 	{
 	}
-	vector_iterator& operator = (const vector_iterator& other)
+	vector_iterator& operator=(const vector_iterator& other)
 	{
 		_ptr = other._ptr;
 		return (*this);
@@ -137,7 +139,7 @@ public:
 		return (*(_ptr + a));
 	}
 private:
-	pointer		_ptr;
+	it		_ptr;
 };
 	template<typename T>
 	vector_iterator<T> operator + (typename vector_iterator<T>::difference_type a, vector_iterator<T>& t )

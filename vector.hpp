@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/03 15:06:19 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/07 11:06:00 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,17 +94,18 @@ public:
 		_size = other._size;
 		_capacity = other._size;
 	}
-	// template< class InputIt > vector( InputIt first, InputIt last, const Allocator& alloc = Allocator() )
-	// 	: _allocator(alloc)
-	// {
-	// 	difference_type	a = last - first;
-	// 	std::cout<<a<<std::endl;
-	// 	_arr = _allocator.allocate(a);
-	// 	for(difference_type o = 0; o != a; o++)
-	// 		_allocator.construct(_arr + o, *(first + o));
-	// 	_size = a;
-	// 	_capacity = a;
-	// }
+	template< class InputIt >
+		vector(InputIt  first, InputIt last,
+		const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral< InputIt >::value, InputIt>::type* = 0)
+		: _allocator(alloc)
+	{
+		difference_type	a = last - first;
+		_arr = _allocator.allocate(a);
+		for(difference_type o = 0; o != a; o++)
+			_allocator.construct(_arr + o, *(first + o));
+		_size = a;
+		_capacity = a;
+	}
 	~vector()
 	{
 		if (_arr)
@@ -123,7 +124,7 @@ public:
 			_arr = 0;
 		}
 		if (!_arr)
-			_arr = _allocator.allocatte(other._size);
+			_arr = _allocator.allocate(other._size);
 		construct(_arr, other._size, other._arr);
 		_size = other._size;
 		return (*this);
@@ -204,30 +205,28 @@ public:
 		destroy(_arr, _size);
 		_size = 0;
 	}
-
-    void insert (iterator position, size_type n, const value_type& val)
+	template<typename ST>
+    void insert (iterator position, ST n, const value_type& val, typename ft::enable_if<ft::is_integral< ST >::value, ST>::type* = 0)
 	{
-		size_type	index = begin() - position;
+		size_type	index = position - begin();
 		if (_size + n > _capacity)
 			reserve(_capacity + n);
-		for (size_t i = _size - 1; i != index; i--)
-			_arr[i + n] = _arr[i];
+		for (size_t i = _size - 1; i >= index; i--)
+			_allocator.construct(_arr + i + n , _arr[i]);
 		for (size_t i = index; i < index + n; i++)
-			_arr[i] = val;
+			_allocator.construct(_arr + i, val);
 		_size = _capacity;
 	}
 	iterator insert (iterator position, const value_type& val)
 	{
-		size_type	index = begin() - position;
-		std::cout<<index<<std::endl;
+		size_type	index = position - begin();
 		if (_size == _capacity && _capacity == 0)
-			reserve(1);
+			reserve(_size + 1);
 		else if (_size == _capacity)
 			reserve(_capacity * 2);
-		for (size_t i = _size - 1; i != index; i--)
+		for (size_t i = _size - 1; i >= index; i--)
 			_allocator.construct(_arr + i + 1, *(_arr + i));
-			// _arr[i + 1] = _arr[i];
-		_arr[index] = val;
+		_allocator.construct(_arr + index, val);
 		_size++;
 		return (iterator(_arr + index));
 	}
@@ -235,7 +234,7 @@ public:
 	void resize(size_type sz, T c = T());
 	void push_back(const T& x);
 	void pop_back();
-	template <class InputIterator> void insert(iterator position, InputIterator first, InputIterator last);
+	// template <class InputIterator> void insert(iterator position, InputIterator first, InputIterator last);
 	iterator erase(iterator position);
 	iterator erase(iterator first, iterator last);
 	void swap(vector<T,Allocator>&);

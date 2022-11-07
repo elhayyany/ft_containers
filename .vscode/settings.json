@@ -67,6 +67,7 @@
         "tuple": "cpp",
         "typeinfo": "cpp",
         "utility": "cpp",
-        "__cxx_version": "cpp"
+        "__cxx_version": "cpp",
+        "*.ipp": "cpp"
     }
 }

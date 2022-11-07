@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/07 11:06:00 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/07 11:08:50 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,7 +228,7 @@ public:
 			_allocator.construct(_arr + i + 1, *(_arr + i));
 		_allocator.construct(_arr + index, val);
 		_size++;
-		return (iterator(_arr + index));
+		return (position);
 	}
 	// template <class InputIterator>    void insert (iterator position, InputIterator first, InputIterator last);
 	void resize(size_type sz, T c = T());

@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/07 10:55:29 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/11 09:42:13 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // #include <stack>
 // #include <set>
 // #include <iostream>
-// #include <iostream>
+#include <iostream>
 #include <string>
 #include <vector>
 // #include <algorithm>
@@ -28,46 +28,19 @@
 // #include <iostream>
 
 
+
 int main()
 {
-{
-    std::cout<<std::endl<<"---------------FT---------------"<<std::endl;
-	ft::vector<int> s(10, 10);
-    for (int i = 0; i < 10; i++)
-    {
-        s[i] = i;
-    }
-    s.insert(++(++s.begin()), 5, 9);
-    for (ft::vector<int>::iterator u = s.begin(); u != s.end(); u++)
-    {
-        std::cout<<*u<<" ";
-    }
-    s.insert(++(++(++(++s.begin()))), 78);
-    std::cout<<std::endl;
-    for (ft::vector<int>::iterator u = s.begin(); u != s.end(); u++)
-    {
-        std::cout<<*u<<" ";
-    }
+	ft::vector<int> s(15, -1);
+	ft::vector<int> a;
+	for (size_t i = 0; i < 16; i++)
+	{
+		// if (i == 14)
+		// a.push_back(1);
+		// else
+		a.push_back(-1);
+	}
+	std::cout<<a.capacity()<<"  "<<a.size()<<"       "<<s.capacity()<<"  "<<s.size()<<std::endl;
+	
+	std::cout<< (s != a) <<std::endl;
 }
-    std::cout<<std::endl<<"---------------STD---------------"<<std::endl;
-{
-	std::vector<int> s(10, 10);
-    for (int i = 0; i < 10; i++)
-    {
-        s[i] = i;
-    }
-    s.insert(++(++s.begin()), 5, 9);
-    for (std::vector<int>::iterator u = s.begin(); u != s.end(); u++)
-    {
-        std::cout<<*u<<" ";
-    }
-    std::cout<<std::endl;
-    s.insert(++(++(++(++s.begin()))), 78);
-    for (std::vector<int>::iterator u = s.begin(); u != s.end(); u++)
-    {
-        std::cout<<*u<<" ";
-    }
-}	
-
-}
-

@@ -68,6 +68,10 @@
         "typeinfo": "cpp",
         "utility": "cpp",
         "__cxx_version": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "filesystem": "cpp",
+        "csignal": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp"
     }
 }

@@ -6,13 +6,15 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 17:00:59 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/02 16:54:32 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/07 16:17:10 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef IS_INTEGRAL_HPP
+#define IS_INTEGRAL_HPP
 #include <iostream>
 #include <type_traits>
-
+#include "vector.hpp"
 namespace ft{
 
   template<class T, T v>
@@ -40,4 +42,19 @@ namespace ft{
   template <> struct is_integral<unsigned long> : public true_type{};
   template <> struct is_integral<unsigned long long> : public true_type{};
   
+  // template<class T, T v>
+  // struct  iterator_constant
+  // {
+  //   static const T value = v;
+  //   operator T() const { return value; }
+  // };
+  // typedef iterator_constant<bool, true> true_Ittype;
+  // typedef iterator_constant<bool, false> false_ITtype;
+  // template <class T> struct is_iterator:false_ITtype{};
+  // template  <class T> struct is_iterator<typename ft::vector<T>::iterator>:true_Ittype{};
+  // template  <class T> struct is_iterator<typename ft::vector<T>::const_iterator>:true_Ittype{};
+  // template  <class T> struct is_iterator<typename ft::vector<T>::reverse_iterator>:true_Ittype{};
+  // template  <class T> struct is_iterator<typename ft::vector<T>::const_reverse_iterator>:true_Ittype{};
+
 }
+#endif

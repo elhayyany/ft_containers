@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 09:32:06 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/06 13:19:01 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/11 12:05:55 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,18 @@ public:
 	}
 	vector_reverse_iterator operator - (difference_type a)
 	{
-		vector_reverse_iterator t(_ptr - a);
+		vector_reverse_iterator t(_ptr + a);
 		return (t);
 	}
 	vector_reverse_iterator operator - (vector_reverse_iterator& other)
 	{
 		
-		vector_reverse_iterator t(_ptr - other._ptr);
+		vector_reverse_iterator t(_ptr + other._ptr);
 		return (t);
 	}
 	vector_reverse_iterator operator + (difference_type a)
 	{
-		vector_reverse_iterator t(_ptr + a);
+		vector_reverse_iterator t(_ptr - a);
 		return (t);
 	}
 
@@ -102,7 +102,7 @@ public:
 	}
 	vector_reverse_iterator& operator - (const vector_reverse_iterator& other)
 	{
-		return (_ptr - other._ptr);
+		return (_ptr + other._ptr);
 	}
 	reference	operator * ()
 	{
@@ -126,15 +126,15 @@ public:
 	}
 	void operator += (const difference_type a)
 	{
-		_ptr += a;
+		_ptr -= a;
 	}
 	void operator -= (const difference_type a)
 	{
-		_ptr -= a;
+		_ptr += a;
 	}
 	reference operator [] (difference_type a)
 	{
-		return (*(_ptr + a));
+		return (*(_ptr - a));
 	}
 private:
 	pointer		_ptr;
@@ -142,7 +142,7 @@ private:
 	template<typename T>
 	vector_reverse_iterator<T> operator + (typename vector_reverse_iterator<T>::difference_type a, vector_reverse_iterator<T>& t )
 	{
-		vector_reverse_iterator<T> k(t + a);
+		vector_reverse_iterator<T> k(t - a);
 		return (t);
 	}
 }

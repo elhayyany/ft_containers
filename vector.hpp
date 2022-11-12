@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/11 09:42:23 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/12 14:30:32 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,30 +85,27 @@ public:
 	// Member functions !!!
 
 
-	explicit vector():_size(0), _capacity(0), _arr(0), _allocator(allocator_type()) {};
+	explicit vector():_size(0), _capacity(0), _allocator(allocator_type()) {_arr = nullptr;};
 	explicit vector( size_type count, const value_type& val = value_type(), const Allocator& alloc = Allocator()): _allocator(alloc)
 	{
 		if (count > _allocator.max_size())
 			throw std::length_error("vector");
-		_arr = _allocator.allocate(count);
-		// std::cout<<"ddd\n";
-		// // construct(_arr, count, value);
+		if(count)
+			_arr = _allocator.allocate(count);
+		else
+			_arr = nullptr;
 		for (size_t i = 0; i < count; i++)
-		{
-			// std::cout<<i<<"  ddd\n";
 			_allocator.construct(_arr + i, val);
-			// std::cout<<(_arr+i)<<"  ";
-		}
-		// (void)val;
-		// (void)count;
 		_size = count;
 		_capacity = count;
-		// std::cout<<"ddd\n";
 	}
 
 	vector( const vector& other )
 	{
-		_arr = _allocator.allocate(other._size);
+		if (other._arr)
+			_arr = _allocator.allocate(other._size);
+		else
+			_arr = nullptr;
 		construct(_arr, other._size, other._arr);
 		_size = other._size;
 		_capacity = other._size;
@@ -118,7 +115,7 @@ public:
 		const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral< InputIt >::value, InputIt>::type* = 0)
 		: _allocator(alloc)
 	{
-		difference_type	a = last - first;
+		difference_type	a = size_it(first, last);
 		_arr = _allocator.allocate(a);
 		for(difference_type o = 0; o != a; o++)
 			_allocator.construct(_arr + o, *(first + o));
@@ -127,7 +124,7 @@ public:
 	}
 	~vector()
 	{
-		if (_arr)
+		if (_capacity)
 		{
 			destroy(_arr, _size);
 			_allocator.deallocate(_arr, _capacity);
@@ -135,15 +132,14 @@ public:
 	}
 	vector& operator=( const vector& other )
 	{
-		destroy(_arr, _size);
-		if (_arr && _capacity < other._size)
+		clear();
+		if (_capacity < other._size)
 		{
-			_allocator.deallocate(_arr, _size);
-			_capacity = other._size;
-			_arr = 0;
-		}
-		if (!_arr)
+			if (_capacity)
+				_allocator.deallocate(_arr, _capacity);
 			_arr = _allocator.allocate(other._size);
+			_capacity = other._size;
+		}	
 		construct(_arr, other._size, other._arr);
 		_size = other._size;
 		return (*this);
@@ -164,10 +160,10 @@ public:
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral< InputIterator >::value, InputIterator>::type* = 0)
 	{
-		difference_type	a = last - first;
+		difference_type	a = size_it(first, last);
 		clear();
 		if (a > (difference_type)_capacity)
-			*this = ft::vector<T>(a);
+			reserve(a);
 		for (size_type	i = 0; first != last && ++i; first++)
 			_allocator.construct(_arr + i - 1 , *first);
 		_size = a;
@@ -192,10 +188,14 @@ public:
 	}
 	reference operator[]( size_type pos )
 	{
+		if (pos >= _size)
+			throw std::out_of_range("vector");
 		return (*(_arr + pos));
 	}
 	const_reference operator[]( size_type pos ) const
 	{
+		if (pos >= _size)
+			throw std::out_of_range("vector");
 		return (*(_arr + pos));
 	}
 	reference back() {return (*(_arr + _size - 1));}
@@ -222,7 +222,7 @@ public:
 			_arr = _allocator.allocate(n);
 			construct(_arr, _size, ptr);
 			destroy(ptr, _size);
-			_allocator.deallocate(ptr, _size);
+			_allocator.deallocate(ptr, _capacity);
 			_capacity = n;
 		}
 	}
@@ -286,8 +286,8 @@ public:
 				_allocator.construct(_arr + i + n - 1, _arr[i - 1]);
 				_allocator.destroy(_arr + i -1);
 			}
-		for (;  first != last; first++)
-			_allocator.construct(_arr + index++, *first);
+		for (;  first != last; first++, index++)
+			_allocator.construct(_arr + index, *first);
 		_size += n;
 	}
 	void resize(size_type n, T c = T())
@@ -351,14 +351,11 @@ public:
 	}
 	void swap(vector<T,Allocator>& other)
 	{
-		allocator_type teem = other._allocator;
-		other._allocator = _allocator;
-		_allocator = teem;
 		pointer tem = other._arr;
 		other._arr = _arr;
 		_arr = tem;
-		(_capacity ^= other._capacity), (other._capacity ^= _capacity), (_capacity ^= other._capacity);
-		(_size ^= other._size), (other._size ^= _size), (_size ^= other._size);
+		_size = _size ^ other._size, other._size = _size ^ other._size, _size = _size ^ other._size;
+		_capacity = _capacity ^ other._capacity, other._capacity = _capacity ^ other._capacity, _capacity = _capacity ^ other._capacity;
 	}
 
 };
@@ -381,12 +378,27 @@ public:
 				return (0);
 		return (1);
 	}
-	template <class T, class Allocator> bool operator< (const vector<T,Allocator>& x, const vector<T,Allocator>& y);
-	template <class T, class Allocator> bool operator> (const vector<T,Allocator>& x, const vector<T,Allocator>& y);
-	template <class T, class Allocator> bool operator>=(const vector<T,Allocator>& x, const vector<T,Allocator>& y);
-	template <class T, class Allocator> bool operator<=(const vector<T,Allocator>& x, const vector<T,Allocator>& y);
+	template <class T, class Allocator> bool operator < (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+	{
+		return (ft::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end()));
+	}
+	template <class T, class Allocator> bool operator > (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+	{
+		return (ft::lexicographical_compare(y.begin(), y.end(), x.begin(), x.end()));
+	}
+	template <class T, class Allocator> bool operator >= (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+	{
+		if (x > y || x == y)
+			return (1);
+		return (0);
+	}
+	template <class T, class Allocator> bool operator <= (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
+	{
+		if (x < y || x == y)
+			return (1);
+		return (0);
+	}
 	// specialized algorithms:
-	template <class T, class Allocator> void swap(vector<T,Allocator>& x, vector<T,Allocator>& y);
 }
 
 #endif

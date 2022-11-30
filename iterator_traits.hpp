@@ -12,8 +12,8 @@
 
 
 
-#ifndef VECTOR_TERATOR_TRAITS_HPP
-#define VECTOR_TERATOR_TRAITS_HPP
+#ifndef TERATOR_TRAITS_HPP
+#define TERATOR_TRAITS_HPP
 #include "enable_if.hpp"
 namespace ft
 {

@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:03:55 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/10/18 15:29:43 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/20 11:26:52 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
-
+#include <map>
 class p{
     public:
     typedef int INTEGER;

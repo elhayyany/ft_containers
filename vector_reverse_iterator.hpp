@@ -6,14 +6,14 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 09:32:06 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/11 12:05:55 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/29 16:37:44 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #ifndef VECTOR_REVERSE_ITERATOR_HPP
 #define VECTOR_REVERSE_ITERATOR_HPP
-#include "vector_iterator_traits.hpp"
+#include "iterator_traits.hpp"
 namespace ft
 {
 template <class it>
@@ -92,9 +92,9 @@ public:
 		return (t);
 	}
 
-	bool operator == (const vector_reverse_iterator& other)
+	template <class ii> friend bool operator== (const vector_reverse_iterator<ii>& lhs, const vector_reverse_iterator<ii>& rhs)
 	{
-		return (_ptr == other._ptr);
+		return (lhs._ptr == rhs._ptr);
 	}
 	bool operator != (const vector_reverse_iterator& other)
 	{

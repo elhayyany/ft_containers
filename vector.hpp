@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/15 17:34:34 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/22 09:37:39 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	construct(pointer _to_construct, size_type count, pointer value)
 }
 public:
 
-	// Iterator
+	//? Iterator
 
 
 	const_iterator begin() const { return (const_iterator(_arr)); } 								//! const begin iterator
@@ -82,7 +82,11 @@ public:
 	const_reverse_iterator rbegin() const { return(const_reverse_iterator(_arr + _size - 1)); }		//! const reverse begin iterator
 	reverse_iterator rend() { return(reverse_iterator(_arr - 1)); }									//! reverse end iterator
 	const_reverse_iterator rend() const { return(const_reverse_iterator(_arr - 1)); }				//! const reverse end iterator
-	// Member functions !!!
+
+
+
+
+	//? Member functions !!!
 
 
 	explicit vector():_size(0), _capacity(0), _allocator(allocator_type()) {_arr = nullptr;};
@@ -300,9 +304,8 @@ public:
 			for (size_t i = _size; i < n; i++)
 				_allocator.construct(_arr + i, c);
 		else
-			for (size_t i = _size; i > n; i--)//{
+			for (size_t i = _size; i > n; i--)
 				_allocator.destroy(_arr + i - 1);
-				// _allocator.destroy(_arr + i);}
 		_size = n;
 	}
 	void push_back(const T& x)
@@ -314,12 +317,13 @@ public:
 		_allocator.construct(_size + _arr, x);
 		_size++;
 	}
+
 	void pop_back()
 	{
 		_allocator.destroy(_arr + _size);
 		_size--;
 	}
-	// template <class InputIterator> void insert(iterator position, InputIterator first, InputIterator last);
+
 	iterator erase(iterator position)
 	{
 		size_type	index = position - begin();
@@ -332,6 +336,7 @@ public:
 		_size--;
 		return iterator(_arr + index);
 	}
+
 	iterator erase(iterator first, iterator last)
 	{
 		difference_type	tem = last - first;
@@ -349,6 +354,7 @@ public:
 		_size -= tem;
 		return (iterator(_arr + index));
 	}
+
 	void swap(vector<T,Allocator>& other)
 	{
 		pointer tem = other._arr;

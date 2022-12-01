@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:49 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/29 16:33:19 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/11/30 12:48:13 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,6 @@
 
 #define	_black	0
 #define	_red	1
-
-// template < class Key,  [map::key_type  ]
-//         class T,                                        [map::mapped_type]
-//         class Compare = less<Key>,                      [map::key_compare]
-//         class Alloc = allocator<pair<const Key, T> >     [map::allocator_type]
-//         > class map
-
-
 
 namespace	ft
 {
@@ -58,14 +50,14 @@ public:
 //! CONSTRUCTERS:
 
 	map() root(nullptr) {};
-	explicit map( const Compare& comp, const Allocator& alloc = Allocator() );
+	explicit map( const Compare& comp, const Allocator& alloc = Allocator()): _allocator(alloc), _com(comp);
 	template< class InputIt >
-	map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() );
+	map( InputIt first, InputIt last, const Compare& comp = Compare(), const Allocator& alloc = Allocator() ): _allocator(alloc), _com(comp);
 	map( const map& other );
 	~map();
 	map& operator=( const map& other );
-	allocator_type get_allocator() const;
-	
+	allocator_type get_allocator() const {return(allocator)};
+
 //! element access
 
 	T& at( const Key& key );
@@ -130,7 +122,8 @@ void swap( std::map<Key,T,Compare,Alloc>& lhs, std::map<Key,T,Compare,Alloc>& rh
 private:
 	rbtree<value_type>		*root;
 	size_type	_size;
-	
+	Allocator	_allocator;
+	key_comp	_com;
 };
 }
 #endif

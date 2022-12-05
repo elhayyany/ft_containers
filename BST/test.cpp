@@ -36,6 +36,23 @@ void    preorder(BTs<int> tree)
 }
 
 
+void    inorder(BT<int> *r)
+{
+	BT<int>* temp = r;
+    std::stack<BT<int>*> st;
+    while (temp != NULL || !st.empty()) {
+        if (temp != NULL) {
+            st.push(temp);
+            temp = temp->left;
+        }
+        else {
+            temp = st.top();
+            st.pop();
+            std::cout << temp->val << " ";
+            temp = temp->right;
+        }
+    }
+}
 
 int main()
 {
@@ -46,9 +63,20 @@ int main()
     tree.insert(9);
     tree.insert(8);
     tree.insert(1);
+    tree.insert(12);
+    tree.insert(-8);
+    tree.insert(4);
+    tree.insert(41);
+    tree.insert(-41);
     print(tree);
     std::cout <<"----------------"<<std::endl;
-    preorder(tree);
+    // preorder(tree);
+    std::cout <<"----------------"<<std::endl;
     std::cout <<"----------------"<<std::endl;
     std::cout<<tree.search(8)->val<<std::endl;
+    std::cout <<"----------------"<<std::endl;
+    // tree.deletez(-41);
+    // tree.deletez(7);
+	inorder(tree._root);
+    // print(tree);
 }

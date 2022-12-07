@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 11:15:52 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/30 13:18:17 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/05 16:10:48 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,7 @@ struct iterator_traits<const T*>
 
 
 
-template <class value_type>
-struct rbtree
-{
-	rbtree(value_type v, bool co):val(v), color(co), left(nullptr), wright(nullptr) {}
-	value_type	val;
-	bool		color;
-	rbtree		*left;
-	rbtree		*wright;
-	rbtree		*parent;
-};
+
 
 template <class _Tp, class _NodePtr, class _DiffType>
 class	map_iterator

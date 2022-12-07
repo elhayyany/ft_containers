@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:49 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/30 12:48:13 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/06 10:55:43 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ public:
 
 //! Observers
 	key_compare key_comp() const;
-	// std::map::value_compare value_comp() const;
+	//! std::map::value_compare value_comp() const; 
 
 
 
@@ -120,7 +120,16 @@ template< class Key, class T, class Compare, class Alloc >
 void swap( std::map<Key,T,Compare,Alloc>& lhs, std::map<Key,T,Compare,Alloc>& rhs );
 
 private:
-	rbtree<value_type>		*root;
+	struct rbtree
+	{
+		rbtree(value_type v, bool co = 0):val(v), color(co), left(nullptr), right(nullptr) {}
+		value_type	val;
+		bool		color;
+		rbtree		*left;
+		rbtree		*right;
+		rbtree		*parent;
+	};
+	rbtree		*root;
 	size_type	_size;
 	Allocator	_allocator;
 	key_comp	_com;

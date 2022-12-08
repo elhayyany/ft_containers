@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 11:15:52 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/05 16:10:48 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/07 15:32:31 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,11 @@ template <class _Tp, class _NodePtr, class _DiffType>
 class	map_iterator
 {
 
-typedef		iterator_traits<it>::pointer			pointer;
-typedef		iterator_traits<it>::value_type			value_type;
-typedef		iterato_traits<it>::difference_type		difference_type;
-typedef		iterator_traits<it>::reference			reference;
-typedef		iterator_traits<it>::iterator_category	iterator_category;
+typedef		typename iterator_traits<_NodePtr>::pointer				pointer;
+typedef		typename iterator_traits<_NodePtr>::value_type			value_type;
+typedef		typename iterator_traits<_NodePtr>::difference_type		difference_type;
+typedef		typename iterator_traits<_NodePtr>::reference			reference;
+typedef		typename iterator_traits<_NodePtr>::iterator_category	iterator_category;
 
 
 

@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 09:56:09 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/20 11:01:45 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/07 14:55:23 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@ namespace ft
 {
 template<
 	class T1,
-	class T2
-> struct pair
+	class T2>
+struct pair
 {
 	typedef	T1  first_type;
 	typedef	T2  second_type;
@@ -27,7 +27,7 @@ template<
 	pair& operator=( const pair& other );
 
 	//!  non mumber functions
-	friend ft::pair<T1, T2> make_pair( T1 t, T2 u );
+	friend ft::pair<T1, T2> make_pair( T1 t, T2 u )
 	{
 		return ( pair<T1,T2>(t, u) );
 	}

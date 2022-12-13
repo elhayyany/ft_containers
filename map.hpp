@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:49 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/07 15:56:25 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/13 10:33:40 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@
 #include <exception>
 #include "map_iterator.hpp"
 
-#define	_black	0
-#define	_red	1
+#define	_BLACK	0
+#define	_RED	1
+#define	_LEFT	0
+#define	_RIGHT	1
 
 namespace	ft
 {
@@ -34,9 +36,10 @@ template < class Key,
 private:
 struct rbtree
 {
-	rbtree(pair<const	Key, T>	 v, bool co = 0):val(v), color(co), left(nullptr), right(nullptr) {}
+	rbtree(pair<const	Key, T>	 v, rbtree *_parent = nullptr, bool _sidebool, co = _RED):val(v), color(co), side(_side), left(nullptr), right(nullptr), parent(_parent) {}
 	pair<const	Key, T>	val;
 	bool		color;
+	bool		side;
 	rbtree		*left;
 	rbtree		*right;
 	rbtree		*parent;
@@ -61,7 +64,7 @@ public:
 
 //! CONSTRUCTERS:
 
-	map(): root(nullptr) {};
+	map(): _root(nullptr) {};
 	explicit map( const Compare& comp, const Alloc& alloc = Alloc()): _allocator(alloc), _com(comp){}
 	template< class InputIt >
 	// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _allocator(alloc), _com(comp){}
@@ -72,8 +75,6 @@ public:
 
 //! element access
 
-	T& at( const Key& key );
-	const T& at( const Key& key ) const;
 	T& operator[]( const Key& key );
 
 
@@ -86,8 +87,66 @@ public:
 	void clear();
 	std::pair<iterator, bool> insert( const value_type& value )
 	{
-		std::cout<<"jj j .  "<<value.first();
-		return (value);
+		if (!_root)
+			_root = _allocate_and_construct(value, _BLACK, 0);
+		else
+		{
+			rbtree *node = _root;
+			rbtree *new_node = nullptr;
+			while (1)
+			{
+				if (node->val.first > value.first)
+				{
+					if (node->left)
+						node = node->left;
+					else
+					{
+						node->left = _allocate_and_construct(value, _LEFT, node);
+						new_node = node->left;
+						break;
+					}
+				}
+				else if (node->val.first < value.first())
+				{
+					if (node->right)
+						node = node->right;
+					else
+					{
+						node->right = _allocate_and_construct(value, _RIGHT, node);
+						new_node = node->right;
+						break;
+					}
+				}
+				else
+					return (iterator(node), 0);
+			}
+			if (node->color == _BLACK)
+				return (iterator(node), 1);
+			else
+			{
+				if (_sib_color(node) == _BLACK)
+				{
+					if (new_node->side == node->side)
+					{
+						right_rotation(node);
+					}
+					else
+					{
+						left_rotatio(node);
+						right_rotation(node);
+					}
+				}
+				else
+				{
+					if (node->parent.parent)
+						node->parent->color = _RED;
+					node->color = _BLACK;
+					new_node->color = _BLACK;
+					if (_get_sib(node))
+						_get_sib(node)->color = _BLACK;
+				}
+			}
+		}
 	}
 	void swap( map& other );
 	
@@ -127,10 +186,49 @@ friend bool operator>= ( const std::map<Key,T,Compare,Alloc>& lhs, const std::ma
 // void swap( std::map<Key,T,Compare,Alloc>& lhs, std::map<Key,T,Compare,Alloc>& rhs );
 
 private:
-	rbtree			*root;
-	size_type		_size;
-	Alloc			_allocator;
-	key_compare		_com;
+	rbtree					*_root;
+	size_type				_size;
+	Alloc					_allocator;
+	std::allocator<rbtree>	_rballocatr;
+	key_compare				_com;
+	rbtree	*_allocate_and_construct(const value_type& val, bool color, bool side, rbtree *parent)
+	{
+		rbtree	*node = _rballocatr.allocate(1);
+		_rballocatr.construct(node, rbtree(val, parent, color, side));
+		return (node);
+	}
+
+	bool	_sib_color(rbtree *node)
+	{
+		if (node->side == _LEFT)
+		{
+			if (node->parent->right)
+				return (node->parent->right.color);
+		}
+		else (node->parent->left)
+			return (node->parent->left.color);
+		return (_BLACK);
+	}
+	rbtree	*_get_sib(rbtree *node)
+	{
+		return (node->side ? node->left : node->right);
+	}
+	rbtree	*__L_L__rotation(rbtree	*node)
+	{
+		
+	}
+	rbtree *__R_R__rotation(rbtree *node)
+	{
+		
+	}
+	rbtree *__R_L__rotation(rbtree *node)
+	{
+		
+	}
+	rbtree *__L_R__rotation(rbtree *node)
+	{
+
+	}
 };
 }
 #endif

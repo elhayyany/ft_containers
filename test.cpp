@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/07 15:55:53 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/09 02:28:30 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ public:
 #include "vector.hpp"
 #include <cmath>
 #include <map>
-#include "map.hpp"
+// #include "map.hpp"
 #include "stack.hpp"
 #include <iostream>
 #include <algorithm>
@@ -215,9 +215,13 @@ public:
 
 int main()
 {
-    std::string l("ss");
-   ft::map<int, std::string> a;
- 
-   a.insert(std::pair<int, std::string>(1, "hello") );
+    std::pair<int, int> c (3,1);
+    std::map<int, int> a;
+
+    a.insert(c);
+    std::pair<int, int> x(3,1);
+    std::cout<< *(a.insert(x).first) <<std::endl;
+
+
 
 }

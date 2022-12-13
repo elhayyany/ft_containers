@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:49 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/13 10:33:40 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/13 11:52:42 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,15 +126,16 @@ public:
 			{
 				if (_sib_color(node) == _BLACK)
 				{
-					if (new_node->side == node->side)
-					{
-						right_rotation(node);
-					}
+					if (node->side == new_node->side && new_node->side == _LEFT)
+						__L_L__rotation(node, node->parent);
+					else if (node->side == new_node->side && new_node->side == _RIGHT)
+						__R_R__rotation(node, node->parent);
+					else if (node->side != new_node->side && new_node->side == _RIGHT)
+						__L_R__rotation(node, node->parent);
+					else if (node->side != new_node->side && new_node->side == _LEFT)
+						__R_L__rotation(node, node->parent);
 					else
-					{
-						left_rotatio(node);
-						right_rotation(node);
-					}
+						std::cout<<"3wrtihaaaa"<<std::endl;
 				}
 				else
 				{
@@ -213,19 +214,19 @@ private:
 	{
 		return (node->side ? node->left : node->right);
 	}
-	rbtree	*__L_L__rotation(rbtree	*node)
+	rbtree	*__L_L__rotation(rbtree	*node, rbtree *nod_parent)
 	{
 		
 	}
-	rbtree *__R_R__rotation(rbtree *node)
+	rbtree *__R_R__rotation(rbtree *node, rbtree *nod_parent)
 	{
 		
 	}
-	rbtree *__R_L__rotation(rbtree *node)
+	rbtree *__R_L__rotation(rbtree *node, rbtree *nod_parent)
 	{
 		
 	}
-	rbtree *__L_R__rotation(rbtree *node)
+	rbtree *__L_R__rotation(rbtree *node, rbtree *nod_parent)
 	{
 
 	}

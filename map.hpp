@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:49 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/13 11:52:42 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/18 10:44:11 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #define	_LEFT	0
 #define	_RIGHT	1
 
+int gl = 0;
 namespace	ft
 {
 template < class Key,
@@ -36,8 +37,8 @@ template < class Key,
 private:
 struct rbtree
 {
-	rbtree(pair<const	Key, T>	 v, rbtree *_parent = nullptr, bool _sidebool, co = _RED):val(v), color(co), side(_side), left(nullptr), right(nullptr), parent(_parent) {}
-	pair<const	Key, T>	val;
+	rbtree(ft::pair<const	Key, T>	 v, rbtree *_parent = nullptr, bool _sidebool = 0, bool co = _RED):val(v), color(co), side(_sidebool), left(nullptr), right(nullptr), parent(_parent) {}
+	ft::pair<const	Key, T>	val;
 	bool		color;
 	bool		side;
 	rbtree		*left;
@@ -48,7 +49,7 @@ struct rbtree
 public:
 	typedef     				Key											key_type;
 	typedef     				T											mapped_type;
-	typedef						std::pair<const	Key, T>							value_type;
+	typedef						ft::pair<const	Key, T>							value_type;
 	typedef						size_t										size_type;
 	typedef	typename			std::ptrdiff_t							difference_type;
 	typedef						Compare										key_compare;
@@ -63,7 +64,17 @@ public:
 	// typedef			const_reverse_iterator;
 
 //! CONSTRUCTERS:
-
+	void	print(rbtree *node)
+	{
+		if (!node && !gl)
+			std::cout<<"sss\n";
+		gl++;
+		if (!node)
+			return ;
+		print(node->left);
+		std::cout<<node->val.first <<"\t";
+		print(node->right);
+	}
 	map(): _root(nullptr) {};
 	explicit map( const Compare& comp, const Alloc& alloc = Alloc()): _allocator(alloc), _com(comp){}
 	template< class InputIt >
@@ -82,13 +93,13 @@ public:
 	
 
 
-
 //! Modifiers
 	void clear();
-	std::pair<iterator, bool> insert( const value_type& value )
+	rbtree *troot(){return _root;}
+	bool insert( const value_type& value )
 	{
 		if (!_root)
-			_root = _allocate_and_construct(value, _BLACK, 0);
+			_root = _allocate_and_construct(value, _BLACK, _LEFT, 0);
 		else
 		{
 			rbtree *node = _root;
@@ -101,53 +112,77 @@ public:
 						node = node->left;
 					else
 					{
-						node->left = _allocate_and_construct(value, _LEFT, node);
+						node->left = _allocate_and_construct(value,_RED, _LEFT, node);
 						new_node = node->left;
+						std::cout<<"new node "<<node->left->val.first<<"\n";
 						break;
 					}
 				}
-				else if (node->val.first < value.first())
+				else if (node->val.first < value.first)
 				{
 					if (node->right)
 						node = node->right;
 					else
 					{
-						node->right = _allocate_and_construct(value, _RIGHT, node);
+						node->right = _allocate_and_construct(value,_RED, _RIGHT, node);
 						new_node = node->right;
+						std::cout<<"new node "<<node->right->val.first<<"\n";
 						break;
 					}
 				}
 				else
-					return (iterator(node), 0);
+				{
+					std::cout<<"the same: "<<node->val.first<<" and "<<value.first<<std::endl;
+					return (0);
+				}
 			}
-			if (node->color == _BLACK)
-				return (iterator(node), 1);
-			else
+			if (node->color != _BLACK)
 			{
-				if (_sib_color(node) == _BLACK)
+				while (_not_balanced(node))
 				{
-					if (node->side == new_node->side && new_node->side == _LEFT)
-						__L_L__rotation(node, node->parent);
-					else if (node->side == new_node->side && new_node->side == _RIGHT)
-						__R_R__rotation(node, node->parent);
-					else if (node->side != new_node->side && new_node->side == _RIGHT)
-						__L_R__rotation(node, node->parent);
-					else if (node->side != new_node->side && new_node->side == _LEFT)
-						__R_L__rotation(node, node->parent);
+					std::cout<<"not balaced"<<std::endl;
+					if (_sib_color(node) == _BLACK)
+					{
+						if (node->side == new_node->side && new_node->side == _LEFT)
+						{
+							std::cout<<std::endl<<"L_L"<<std::endl;
+							node = __L_L__rotation(node, node->parent);
+						}
+						else if (node->side == new_node->side && new_node->side == _RIGHT)
+						{
+							std::cout<<std::endl<<"R_R"<<std::endl;
+							node = __R_R__rotation(node, node->parent);
+						}
+						else if (node->side != new_node->side && new_node->side == _RIGHT)
+						{
+							std::cout<<std::endl<<"L_R"<<std::endl;
+							node = __L_R__rotation(node, node->parent);
+						}
+						else if (node->side != new_node->side && new_node->side == _LEFT)
+						{
+							std::cout<<std::endl<<"R_L"<<std::endl;
+							node = __R_L__rotation(node, node->parent);
+						}
+						else
+							std::cout<<"3wrtihaaaa"<<std::endl;
+					}
 					else
-						std::cout<<"3wrtihaaaa"<<std::endl;
-				}
-				else
-				{
-					if (node->parent.parent)
-						node->parent->color = _RED;
-					node->color = _BLACK;
-					new_node->color = _BLACK;
-					if (_get_sib(node))
-						_get_sib(node)->color = _BLACK;
+					{
+						std::cout<<"recoloring \n";
+						if (node->parent->parent)
+							node->parent->color = _RED;
+						node->color = _BLACK;
+						// new_node->color = _BLACK;÷
+						if (_get_sib(node))
+							_get_sib(node)->color = _BLACK;
+					}
 				}
 			}
+			_root = _get__root(node);
 		}
+		gl = 0;
+		print(_root);
+		return (1);
 	}
 	void swap( map& other );
 	
@@ -195,7 +230,7 @@ private:
 	rbtree	*_allocate_and_construct(const value_type& val, bool color, bool side, rbtree *parent)
 	{
 		rbtree	*node = _rballocatr.allocate(1);
-		_rballocatr.construct(node, rbtree(val, parent, color, side));
+		_rballocatr.construct(node, rbtree(val, parent, side, color));
 		return (node);
 	}
 
@@ -204,31 +239,97 @@ private:
 		if (node->side == _LEFT)
 		{
 			if (node->parent->right)
-				return (node->parent->right.color);
+				return (node->parent->right->color);
 		}
-		else (node->parent->left)
-			return (node->parent->left.color);
+		else if (node->parent->left)
+			return (node->parent->left->color);
 		return (_BLACK);
 	}
 	rbtree	*_get_sib(rbtree *node)
 	{
-		return (node->side ? node->left : node->right);
+		if (node->parent)
+		{
+			return (node->side ? node->parent->left : node->parent->right);
+		}
+		return (nullptr);
 	}
 	rbtree	*__L_L__rotation(rbtree	*node, rbtree *nod_parent)
 	{
-		
+		nod_parent->left = node->right;
+		if (node->right)
+			node->right->side = _LEFT;
+		node->right = nod_parent;
+		node->parent = nod_parent->parent;
+		nod_parent->parent = node;
+		if (node->parent)
+		{
+			if (nod_parent->side == _LEFT)
+				node->parent->left = node;
+			else
+				node->parent->right = node;
+		}
+		nod_parent->side = _RIGHT;
+		node->color = _BLACK;
+		nod_parent->color = _RED;
+		return (node);
 	}
 	rbtree *__R_R__rotation(rbtree *node, rbtree *nod_parent)
 	{
-		
+		nod_parent->right = node->left;
+		node->left = nod_parent;
+		node->parent = nod_parent->parent;
+		nod_parent->parent = node;
+		if (node->parent)
+		{
+			if (nod_parent->side == _LEFT)
+				node->parent->left = node;
+			else
+				node->parent->right = node;
+		}
+		nod_parent->side = _LEFT;
+		node->color = _BLACK;
+		nod_parent->color = _RED;
+		return (node);
 	}
 	rbtree *__R_L__rotation(rbtree *node, rbtree *nod_parent)
 	{
-		
+		rbtree	*new_node = node->left;
+		new_node->right = node;
+		node->side = _RIGHT;
+		node->left = nullptr;
+		new_node->parent = nod_parent;
+		node->parent = new_node;
+		nod_parent->right = new_node;
+		new_node->side = _RIGHT;
+		return (__R_R__rotation(new_node, new_node->parent));
 	}
 	rbtree *__L_R__rotation(rbtree *node, rbtree *nod_parent)
 	{
-
+		rbtree	*new_node = node->right;
+		new_node->left = node;
+		node->side = _LEFT;
+		node->right = nullptr;
+		new_node->parent = nod_parent;
+		node->parent = new_node;
+		nod_parent->left = new_node;
+		new_node->side = _LEFT;
+		return (__L_L__rotation(new_node, new_node->parent));
+	}
+	bool	_not_balanced(rbtree *node)
+	{
+		if (node->color == _RED && node->left && node->left->color == _RED)
+			return (1);
+		if (node->color == _RED && node->right && node->right->color == _RED)
+			return (1);
+		if (node->color == _RED && node->parent && node->parent->color == _RED)
+			return (1);
+		return (0);
+	}
+	rbtree *_get__root(rbtree *node)
+	{
+		while(node->parent)
+			node = node->parent;
+		return (node);
 	}
 };
 }

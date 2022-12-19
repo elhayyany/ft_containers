@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:49 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/18 10:44:11 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/19 09:48:30 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,36 @@
 #define	_LEFT	0
 #define	_RIGHT	1
 
-int gl = 0;
 namespace	ft
 {
 template < class Key,
 	class T,
 	class Compare = std::less<Key>,
-	class Alloc = std::allocator<std::pair<const Key, T> >
+	class Alloc = std::allocator<ft::pair<const Key, T> >
 	> class map
 {
 
 
 private:
-struct rbtree
+struct rbtree 
 {
-	rbtree(ft::pair<const	Key, T>	 v, rbtree *_parent = nullptr, bool _sidebool = 0, bool co = _RED):val(v), color(co), side(_sidebool), left(nullptr), right(nullptr), parent(_parent) {}
-	ft::pair<const	Key, T>	val;
+	rbtree(ft::pair<const	Key, T>	 v, rbtree *_parent = nullptr, bool _sidebool = 0, bool co = _RED): color(co), side(_sidebool), left(nullptr), right(nullptr), parent(_parent)
+	{
+		val = _alloc.allocate(1);
+		_alloc.construct(val, v);
+	}
+	ft::pair<const	Key, T>	*val;
 	bool		color;
 	bool		side;
 	rbtree		*left;
 	rbtree		*right;
 	rbtree		*parent;
+	Alloc _alloc;
+	~rbtree()
+	{
+		_alloc.destroy(val);
+		_alloc.deallocate(val, 1);
+	}
 };
 
 public:
@@ -58,35 +67,38 @@ public:
 	typedef	typename			Alloc::const_reference						const_reference;
 	typedef typename			Alloc::pointer								pointer;
 	typedef	typename			Alloc::const_pointer						const_pointer;
-	typedef						map_iterator<Key, rbtree*, Compare>			iterator;
-	typedef						map_iterator<Key, rbtree*, Compare>			const_iterator;
+	typedef						map_iterator<Key, T, rbtree*>			iterator;
+	typedef						map_iterator<Key, T, rbtree*>			const_iterator;
 	// typedef			reverse_iterator;
 	// typedef			const_reverse_iterator;
 
 //! CONSTRUCTERS:
 	void	print(rbtree *node)
 	{
-		if (!node && !gl)
-			std::cout<<"sss\n";
-		gl++;
 		if (!node)
 			return ;
 		print(node->left);
-		std::cout<<node->val.first <<"\t";
+		std::cout<<node->val->first <<"\t";
 		print(node->right);
 	}
 	map(): _root(nullptr) {};
 	explicit map( const Compare& comp, const Alloc& alloc = Alloc()): _allocator(alloc), _com(comp){}
-	template< class InputIt >
+	// template< class InputIt >
 	// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _allocator(alloc), _com(comp){}
 	map( const map& other );
-	~map(){};
+	~map()
+	{
+		clear();
+	};
 	map& operator=( const map& other );
 	allocator_type get_allocator() const {return(_allocator);};
 
 //! element access
 
-	T& operator[]( const Key& key );
+	T& operator[]( const Key& key )
+	{
+		return ((*((insert(make_pair(key, T()))).first)).second);
+	}
 
 
 //! Iterators
@@ -94,11 +106,14 @@ public:
 
 
 //! Modifiers
-	void clear();
-	rbtree *troot(){return _root;}
+	void clear()
+	{
+		clear_node(_root);
+	}
+	rbtree *troot(){return _root;} //! remove
 	bool insert( const value_type& value )
 	{
-		if (!_root)
+		if (!_root && ++_size)
 			_root = _allocate_and_construct(value, _BLACK, _LEFT, 0);
 		else
 		{
@@ -106,7 +121,12 @@ public:
 			rbtree *new_node = nullptr;
 			while (1)
 			{
-				if (node->val.first > value.first)
+				if (node->val->first == value.first)
+				{
+					std::cout<<"the same: "<<node->val->first<<" and "<<value.first<<std::endl;
+					return (0);
+				}
+				else if (_com(value.first, node->val->first))
 				{
 					if (node->left)
 						node = node->left;
@@ -114,11 +134,12 @@ public:
 					{
 						node->left = _allocate_and_construct(value,_RED, _LEFT, node);
 						new_node = node->left;
-						std::cout<<"new node "<<node->left->val.first<<"\n";
+						_size++;
+						std::cout<<"new node "<<node->left->val->first<<"\n";
 						break;
 					}
 				}
-				else if (node->val.first < value.first)
+				else
 				{
 					if (node->right)
 						node = node->right;
@@ -126,15 +147,12 @@ public:
 					{
 						node->right = _allocate_and_construct(value,_RED, _RIGHT, node);
 						new_node = node->right;
-						std::cout<<"new node "<<node->right->val.first<<"\n";
+						std::cout<<"new node "<<node->right->val->first<<"\n";
+						_size++;
 						break;
 					}
 				}
-				else
-				{
-					std::cout<<"the same: "<<node->val.first<<" and "<<value.first<<std::endl;
-					return (0);
-				}
+				
 			}
 			if (node->color != _BLACK)
 			{
@@ -180,7 +198,6 @@ public:
 			}
 			_root = _get__root(node);
 		}
-		gl = 0;
 		print(_root);
 		return (1);
 	}
@@ -205,7 +222,7 @@ public:
 
 
 //! CAPACITY
-	bool		empty() {return _size;}
+	bool		empty() {return !_size;}
 	size_type	size() {return _size;}
 	size_type	max_size() {return Alloc::MAX_SIZE;}
 
@@ -222,15 +239,14 @@ friend bool operator>= ( const std::map<Key,T,Compare,Alloc>& lhs, const std::ma
 // void swap( std::map<Key,T,Compare,Alloc>& lhs, std::map<Key,T,Compare,Alloc>& rhs );
 
 private:
+
 	rbtree					*_root;
 	size_type				_size;
 	Alloc					_allocator;
-	std::allocator<rbtree>	_rballocatr;
 	key_compare				_com;
 	rbtree	*_allocate_and_construct(const value_type& val, bool color, bool side, rbtree *parent)
 	{
-		rbtree	*node = _rballocatr.allocate(1);
-		_rballocatr.construct(node, rbtree(val, parent, side, color));
+		rbtree	*node = new rbtree(val, parent, side, color);
 		return (node);
 	}
 
@@ -330,6 +346,14 @@ private:
 		while(node->parent)
 			node = node->parent;
 		return (node);
+	}
+	void clear_node(rbtree* node)
+	{
+		if (!node)
+			return ;
+		clear_node(node->left);
+		clear_node(node->right);
+		delete node;
 	}
 };
 }

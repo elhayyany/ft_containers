@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/18 11:37:35 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/19 10:50:03 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,8 @@ int main()
    {
       mp.insert(ft::pair<int, int>(i, i));
    }
-   
+   std::cout<<"\n"<<mp.size()<<"\n";
+   // std::map<int, int>::iterator  it;// = mp.begin();
+   // std::cout<< (*(it)).first <<std::endl;
+   // std::cout<<it->first  <<std::endl;
 }

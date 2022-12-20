@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/20 11:12:17 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/20 14:21:23 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,19 @@
 
 int main()
 {
-   rbtree<ft::pair<int, int>, int> a;
+   // rbtree<ft::pair<int, int>, int> a;
+   // for (size_t i = 0; i < 50; i++)
+   // {
+   //    a.insert(ft::pair<int, int>(i,i));
+   //    /* code */
+   // }
+   // std::cout<<a.serch(ft::pair<int, int>(7, 33))->val->first<<std::endl;
+   
+   std::map<int, int> mp;
    for (size_t i = 0; i < 50; i++)
    {
-      a.insert(ft::pair<int, int>(i,i));
-      /* code */
+      mp.insert(std::pair<int, int>(i,i));
    }
-   std::cout<<a.serch(ft::pair<int, int>(7, 33))->val->first<<std::endl;
-   // std::cout<< ((*it).first <<std::endl;
-   // std::cout<<it->first  <<std::endl;
+   
+
 }

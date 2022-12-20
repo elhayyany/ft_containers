@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:49 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/19 09:48:30 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/19 17:25:09 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@
 #include <exception>
 #include "map_iterator.hpp"
 
-#define	_BLACK	0
-#define	_RED	1
-#define	_LEFT	0
-#define	_RIGHT	1
+
 
 namespace	ft
 {
@@ -86,10 +83,7 @@ public:
 	// template< class InputIt >
 	// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _allocator(alloc), _com(comp){}
 	map( const map& other );
-	~map()
-	{
-		clear();
-	};
+	~map() { clear(); };
 	map& operator=( const map& other );
 	allocator_type get_allocator() const {return(_allocator);};
 
@@ -103,7 +97,14 @@ public:
 
 //! Iterators
 	
-
+iterator					begin() {return (iterator(_root));}
+const_iterator				begin() const {return (iterator(_root));}
+iterator					end() {return (iterator(_root));}
+const_iterator				end() const {return (iterator(_root));}
+// reverse_iterator			rbegin() {register_t}
+// const_reverse_iterator		rbegin() const {register_t}
+// reverse_iterator			rend() {register_t}
+// const_reverse_iterator		rend() const {register_t}
 
 //! Modifiers
 	void clear()
@@ -298,9 +299,16 @@ private:
 		if (node->parent)
 		{
 			if (nod_parent->side == _LEFT)
+			{
+				std::cout<<"scgcisch\n";
 				node->parent->left = node;
+			}
 			else
+			{
+
 				node->parent->right = node;
+				std::cout<<"-------\n";
+			}
 		}
 		nod_parent->side = _LEFT;
 		node->color = _BLACK;
@@ -355,6 +363,7 @@ private:
 		clear_node(node->right);
 		delete node;
 	}
+	
 };
 }
 #endif

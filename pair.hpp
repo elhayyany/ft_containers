@@ -6,10 +6,19 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 09:56:09 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/18 11:50:06 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/19 17:19:33 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
+#ifndef PAIR_HPP
+#define PAIR_HPP
+
+
+#define	_BLACK	0
+#define	_RED	1
+#define	_LEFT	0
+#define	_RIGHT	1
 namespace ft
 {
 template<
@@ -46,3 +55,6 @@ ft::pair<T1, T2> make_pair( const T1& t, const T2& u )
 }
 
 }
+
+
+#endif

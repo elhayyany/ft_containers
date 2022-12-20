@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/22 09:37:39 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/19 14:19:25 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ public:
     typedef typename	allocator_type::const_pointer				const_pointer;
 	typedef typename	allocator_type::size_type					size_type;
 	typedef typename	allocator_type::difference_type				difference_type;
-	typedef				vector_iterator<pointer>					iterator;	
+	typedef				vector_iterator<pointer>					iterator;
 	typedef				vector_iterator<const_pointer>				const_iterator;	
 	typedef				vector_reverse_iterator<pointer>			reverse_iterator;	
 	typedef				vector_reverse_iterator<const_pointer>		const_reverse_iterator;	

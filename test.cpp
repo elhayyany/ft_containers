@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/19 10:50:03 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/20 11:12:17 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,18 @@
 #include <iostream>
 #include <algorithm>
 #include <deque>
-
-
+#include "red_black_tree.hpp"
 
 
 int main()
 {
-   ft::map<int, int> mp;
-   for (int i = 0; i < 50; i++)
+   rbtree<ft::pair<int, int>, int> a;
+   for (size_t i = 0; i < 50; i++)
    {
-      mp.insert(ft::pair<int, int>(i, i));
+      a.insert(ft::pair<int, int>(i,i));
+      /* code */
    }
-   std::cout<<"\n"<<mp.size()<<"\n";
-   // std::map<int, int>::iterator  it;// = mp.begin();
-   // std::cout<< (*(it)).first <<std::endl;
+   std::cout<<a.serch(ft::pair<int, int>(7, 33))->val->first<<std::endl;
+   // std::cout<< ((*it).first <<std::endl;
    // std::cout<<it->first  <<std::endl;
 }

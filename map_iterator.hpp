@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 11:15:52 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/19 14:34:27 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/21 10:22:01 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ public:
 	typedef		typename iterator_traits<_NodePtr>::value_type			value_type;
 	typedef		typename iterator_traits<_NodePtr>::difference_type		difference_type;
 	typedef		typename iterator_traits<_NodePtr>::reference			reference;
-	typedef		typename iterator_traits<_NodePtr>::iterator_category	iterator_category;
+	typedef 	std::bidirectional_iterator_tag							iterator_category;
 
 
 	map_iterator(): _root(nullptr), _root_tem(nullptr) {}

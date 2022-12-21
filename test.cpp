@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/20 14:21:23 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/21 10:19:37 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,12 @@ int main()
    {
       mp.insert(std::pair<int, int>(i,i));
    }
+
+   for (auto &i : mp)
+   {
+      std::cout<<i.first<<"   ";
+   }
    
 
 }
+ 

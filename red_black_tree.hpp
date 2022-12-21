@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 11:35:03 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/20 14:17:34 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/20 18:10:58 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,10 @@ public:
 					{
 						std::cout<<"recoloring \n";
 						if (node->parent->parent)
+						{
 							node->parent->color = _RED;
+						// node = node->parent;
+						}
 						node->color = _BLACK;
 						// new_node->color = _BLACK;÷
 						if (_get_sib(node))
@@ -200,7 +203,7 @@ public:
 		else
 		{
 			t_node	*tem = get_left(node);
-			node->val = node
+			node->val = tem->val;
 		}
 	}
 

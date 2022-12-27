@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/19 11:35:03 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/20 18:10:58 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2022/12/26 17:29:28 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ private:
 	        _alloc.destroy(val);
 			_alloc.deallocate(val, 1);
 	    }
-	    T       *val;
-	    t_node   *left;
-	    t_node   *right;
-	    t_node   *parent;
-	    bool    color;
+	    T       	*val;
+	    t_node   	*left;
+	    t_node		*right;
+	    t_node		*parent;
+	    bool    	color;
 	};
 
 	t_node      *_root;
@@ -205,6 +205,12 @@ public:
 			t_node	*tem = get_left(node);
 			node->val = tem->val;
 		}
+	}
+	
+	
+	void	erase(t_node *node)
+	{
+		
 	}
 
 	//!.................................................................

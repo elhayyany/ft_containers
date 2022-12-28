@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 SRCS = test.cpp
-FLAGS = #-Wall -Wextra -Werror  -std=c++98 -fsanitize=address 
+FLAGS = -Wall -Wextra -Werror  -std=c++98 -fsanitize=address 
 CC = c++
 NAME = container
 OBJS = $(SRCS:.cpp=.o)

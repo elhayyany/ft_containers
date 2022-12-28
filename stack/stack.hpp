@@ -14,7 +14,7 @@
 #ifndef STACK_HPP
 #define STACK_HPP
 #include <deque>
-#include "vector.hpp"
+#include "../vector/vector.hpp"
 namespace ft
 {
 

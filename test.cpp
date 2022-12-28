@@ -18,15 +18,15 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "vector.hpp"
+#include "vector/vector.hpp"
 #include <cmath>
 #include <map>
-#include "map.hpp"
-#include "stack.hpp"
+#include "map/map.hpp"
+#include "stack/stack.hpp"
 #include <iostream>
 #include <algorithm>
 #include <deque>
-#include "red_black_tree.hpp"
+#include "map/red_black_tree.hpp"
 
 
 int main()

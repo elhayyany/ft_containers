@@ -44,7 +44,7 @@ int main()
    {
       mp.insert(std::pair<int, int>(i,i));
    }
-
+   mp.erase(6);
    for (auto &i : mp)
    {
       std::cout<<i.first<<"   ";

@@ -64,24 +64,24 @@ public:
 
 	ft::pair<iterator, bool>	insert(const value_type& val)
 	{
-		std::cout<<"i: "<<val.first<<"\n";
+		// std::cout<<"i: "<<val.first<<"\n";
 		ft::pair<t_node *, bool> to_return = __add_node_to_BST_returnIT(val);
-		if (!to_return.second){
-			std::cout<<"ss\n"; return (ft::pair<iterator, bool>(iterator(to_return.first), 0));}
+		// if (!to_return.second){
+		// 	std::cout<<"ss\n"; return (ft::pair<iterator, bool>(iterator(to_return.first), 0));}
 		_size++;
 		t_node	*node = to_return.first;
-		if (node->parent)
-			std::cout<<"........\n"<<node->color  << " ... " << node->parent->color<<"    "<<node->parent->val.first <<std::endl;
+		// if (node->parent)
+		// 	std::cout<<"........\n"<<node->color  << " ... " << node->parent->color<<"    "<<node->parent->val.first <<std::endl;
 		while(node->color == _RED && node->parent->color == _RED)
 		{
 			if (__brother_color(node->parent) == _RED)
 			{
-					std::cout<<"hrer 0     "<<node->parent->val.first<<"\n";
+					// std::cout<<"hrer 0     "<<node->parent->val.first<<"\n";
 				t_node *tem = node->parent;
 				tem->parent->color = _RED;
 				tem->color = _BLACK;
 				__get_brother(tem)->color = _BLACK;
-				std::cout<<"hrer 0     "<<__get_brother(tem)->val.first<<"\n";
+				// std::cout<<"hrer 0     "<<__get_brother(tem)->val.first<<"\n";
 				node = tem->parent;
 				if (!node->parent)
 					node->color = _BLACK;
@@ -91,22 +91,22 @@ public:
 				bool	node_side = __get_node_side(node);
 				if (node_side == __get_node_side(node->parent) && node_side == _LEFT)
 				{
-					std::cout<<"hrer 1\n";
+					// std::cout<<"hrer 1\n";
 					node = __right_rotation(node->parent);
 				}
 				else if (node_side == __get_node_side(node->parent) && node_side == _RIGHT)
 				{
-					std::cout<<"hrer 2\n";
+					// std::cout<<"hrer 2\n";
 					node = __left_rotation(node->parent);
 				}
 				else if (node_side == _RIGHT)
 				{
-					std::cout<<"hrer 3\n";
+					// std::cout<<"hrer 3\n";
 					node = __angle_to_line_left_rotation(node->parent, node);
 				}
 				else
 				{
-					std::cout<<"hrer 4\n";
+					// std::cout<<"hrer 4\n";
 					node = __angle_to_line_right_rotation(node->parent, node);
 				}
 			}
@@ -121,10 +121,9 @@ public:
 	void	p(t_node *node)
 	{
 
-		std::cout<<"^^^^^^^^^^^^^"<<node->val.first<<std::endl;
 		if ((!node->left && !node->right))
 		{
-		std::cout<<node->val.first<<"-------------------"<<std::endl;
+		// std::cout<<": "<<node->val.first<<" "<<std::endl;
 		return;
 		}
 		if (node->left)
@@ -171,11 +170,11 @@ private:
 		t_node	*tem  = _root;
 		while (tem)
 		{
-			if (tem->val == val)
+			if (tem->val.first == val.first)
 				return ft::pair<t_node *, bool>(tem, 0);
 			if (!_com(tem->val.first, val.first))
 			{
-				std::cout<<"less than "<<tem->val.first<<"    "<< val.first<<std::endl;
+				// std::cout<<"less than "<<tem->val.first<<"    "<< val.first<<std::endl;
 				if (!tem->left)
 				{
 					tem->left = __allocate_costruct_node(val, tem);
@@ -185,7 +184,7 @@ private:
 			}
 			else
 			{
-				std::cout<<"grater than "<<tem->val.first<<"    "<< val.first<<std::endl;
+				// std::cout<<"grater than "<<tem->val.first<<"    "<< val.first<<std::endl;
 				if (!tem->right)
 				{
 					tem->right = __allocate_costruct_node(val, tem);
@@ -218,8 +217,10 @@ private:
 
 	t_node	*__angle_to_line_left_rotation(t_node *node, t_node *new_node) // anti-clockwise rotation and it will work when we have an angle and we want it to became a line so we can do left rotation
 	{
-		std::cout<<"node: "<<node->val.first<<"  new_node: "<<new_node->val.first<<std::endl;
+		// std::cout<<"node: "<<node->val.first<<"  new_node: "<<new_node->val.first<<std::endl;
 		node->right = new_node->left;
+		if (node->right)
+			node->right->parent = node;
 		new_node->left = node;
 		new_node->parent = node->parent;
 		node->parent = new_node;
@@ -230,6 +231,8 @@ private:
 	t_node	*__angle_to_line_right_rotation(t_node *node, t_node *new_node) // mirror of __angle_to_line_left_rotation()
 	{
 		node->left = new_node->right;
+		if (node->left)
+			node->left->parent = node;
 		new_node->right = node;
 		new_node->parent = node->parent;
 		node->parent = new_node;
@@ -315,6 +318,6 @@ void	delete_map(t_node *node)
 	__destroy_deallocate_node(node);
 }
 
-};
+};                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
 }
 #endif

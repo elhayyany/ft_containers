@@ -39,17 +39,23 @@ int main()
    // }
    // std::cout<<a.serch(ft::pair<int, int>(7, 33))->val->first<<std::endl;
    
-   std::map<int, int> mp;
-   for (size_t i = 0; i < 50; i++)
+   ft::map<int, int> mp;
+      srand(time(0));
+int g[] = {176, 14, 279, 8, 46, 33, 187, 150, 165};
+   for (size_t i = 0; i < 9; i++)
    {
-      mp.insert(std::pair<int, int>(i,i));
+      int k = rand()%300;
+      std::cout<<"K: "<<g[i]<<std::endl;
+      mp.insert(ft::pair<int, int>(g[i],i));
    }
-   mp.erase(6);
-   for (auto &i : mp)
-   {
-      std::cout<<i.first<<"   ";
-   }
-   
+   mp.print();
+   // mp.erase(6);
+   // for (auto &i : mp)
+   // {
+   //    std::cout<<i.first<<"   ";
+   // }
+   // ft::map<int, int> a;
+   // a.insert(ft::pair<int, int>(1,2));
 
 }
  

@@ -39,19 +39,35 @@ int main()
    // }
    // std::cout<<a.serch(ft::pair<int, int>(7, 33))->val->first<<std::endl;
    
-int g[] = {176, 14, 279, 8, 46, 33, 187, 150, 165};
-// while(1){
-      srand(time(0));
-   // {
-   std::map<int, int> mp;
-   // std::cout<<"=========================================================\n=========================================================\n";
+int g[100] = {0};
+// // while(1){
+//       srand(time(0));
+//    // {
+   ft::map<int, int> mp;
+//    // std::cout<<"=========================================================\n=========================================================\n";
    for (size_t i = 0; i < 100; i++)
    {
-      int k = rand()%300;
-      std::cout<<"K: "<<k<<std::endl;
-      mp.insert(std::pair<int, int>(k,i));
+      int k = rand()%500000;
+      // g[i] = k;
+      // std::cout<<"K: "<<k<<std::endl;
+      mp.insert(ft::pair<int, int>(i,i));
    }
-   // mp.print(); 
+   ft::map<int, int>::iterator a = mp.begin();
+
+   std::cout<<"s'\n"<<(*a).first<<"s'\n"<<std::endl;
+   // ++a;
+   // std::cout<<(*a).first<<std::endl;
+   // ++a;
+   // std::cout<<(*a).first<<std::endl;
+   // ++a;
+   // std::cout<<(*a).first<<std::endl;
+   // std::cout<<(*a).first<<std::endl;
+   // std::cout<<(*(mp.erase(a))).first<<std::endl;
+   // mp.print();
+   mp.erase(a);
+   // exit(0);
+   // a = mp.begin();
+   // std::cout<<(*a).first<<std::endl;
    //}}
    // mp.erase(6)
    // for (auto &i : mp)

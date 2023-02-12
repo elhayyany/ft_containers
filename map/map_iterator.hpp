@@ -50,18 +50,44 @@ public:
 	{
 		_root = _get_left(_root);
 	}
-	map_iterator&	operator=(const map_iterator& it) {_root = it._root; _root_tem = _root;}
+	map_iterator&	operator=(const map_iterator& it) 
+	{
+		_root = it._root;
+		_root_tem = _root;
+		return *(this);	
+	}
 
 
 
 	map_iterator& operator++()
 	{
-		if (_root->parent && _root->parent->right)
+		if (_root && _root->right)
+		{
+			_root = _root->right;
+			_root = _get_left(_root);
+		}
+		else if (_root && __get_node_side(_root) == _LEFT)
+		{
+			_root = _root->parent;
+		}
+		else
+		{
+			while (_root && _root->parent && __get_node_side(_root) == _RIGHT)
+			{
+				_root = _root->parent;
+			}
+			
+		}
+
+
+
+
+		if (_root->right)
+			_root = _root->right;
+		else if (_root->parent && _root->parent->right)
 		{
 			_root = _get_left(_root->parent->right);
 		}
-		else if (_root->parent)
-			_root = _root->parent;
 		else 
 		{
 			_root_tem = _root;
@@ -93,13 +119,13 @@ public:
 	}
 	map_iterator operator--(int);
 
-
+	_NodePtr base(){return (_root);}
 
 	bool	operator==(map_iterator& it) {return (_root == it._root);}
 	bool	operator!=(map_iterator& it) {return (_root != it._root);}
 
-	value_type	operator*()  { return ((_root->val)); }
-	value_type	operator->() { return ((_root->val)); }
+	ft::pair<key, T>	operator*()  { return (_root->val); }
+	ft::pair<key, T>	operator->() { return ((_root->val)); }
 
 private:	
 	_NodePtr	_root;
@@ -115,6 +141,12 @@ private:
 		while(it && it->right)
 			it = it->right;
 		return (it);
+	}
+	bool	__get_node_side(_NodePtr *node)
+	{
+		if (node && node->parent && node->parent->left == node)
+			return (_LEFT);
+		return (_RIGHT);
 	}
 };
 }

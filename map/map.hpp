@@ -10,15 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAP1_HPP
-#define MAP1_HPP
+#ifndef MAP_HPP
+#define MAP_HPP
 
 #include "../utiles/pair.hpp"
 #include <memory>
 #include <exception>
 #include "map_iterator.hpp"
 
-
+#define  _INSERTION	1
+#define  _DELETION	0
 
 namespace	ft
 {
@@ -42,6 +43,25 @@ public:
 	bool    	color; 
 };
 
+typedef struct replacment_s_child
+{
+public:
+	replacment_s_child(): self(nullptr), parent(nullptr) {}
+	replacment_s_child(const replacment_s_child& tem): self(tem.self), parent(tem.parent), _side(tem._side) {}
+	replacment_s_child(t_node *child, t_node *par): self(child), parent(par) {}
+	replacment_s_child& operator=(const replacment_s_child& tem)
+	{
+		self = tem.self;
+		parent = tem.parent;
+		_side = tem._side;
+		return(*this);
+	} 
+	t_node	*self;
+	t_node	*parent;
+	bool	_side;
+
+} t_rep_info;
+
 
 public:
 	typedef     				Key											key_type;
@@ -60,23 +80,58 @@ public:
 	// typedef			reverse_iterator;
 	// typedef			const_reverse_iterator;
 
+//! //////////////////////////////////////
+	
+	void	clear()	{clear_it(_root);}
+//! //////////////////// 
+//* CONSTRUCTERS:
+	map(): _root(nullptr) {};
+	explicit map( const Compare& comp, const Alloc& alloc = Alloc()): Alloc(alloc), _com(comp){}
+	// template< class InputIt >
+	// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _allocator(alloc), _com(comp){}
+	map( const map& other );
+	~map() { clear(); };
+	map& operator=( const map& other );
+	allocator_type get_allocator() const {return(_allocat);}
+//! ////////////////////
 
+
+
+//! Iterators
+	
+	iterator					begin() {return (iterator(_root));}
+	// const_iterator				begin() const {return (iterator(_root));}
+	iterator					end() {return (iterator(_root));}
+	// const_iterator				end() const {return (iterator(_root));}
+	// reverse_iterator			rbegin() {register_t}
+	// const_reverse_iterator		rbegin() const {register_t}
+	// reverse_iterator			rend() {register_t}
+	// const_reverse_iterator		rend() const {register_t}
+	iterator find (const key_type& k);
+	// const_iterator find (const key_type& k) const;
+
+//! ////////////////////
+
+	iterator erase( iterator pos )
+	{
+		return iterator(__erase_node(pos.base()));
+	}
 
 	ft::pair<iterator, bool>	insert(const value_type& val)
 	{
 		// std::cout<<"i: "<<val.first<<"\n";
 		ft::pair<t_node *, bool> to_return = __add_node_to_BST_returnIT(val);
-		// if (!to_return.second){
-		// 	std::cout<<"ss\n"; return (ft::pair<iterator, bool>(iterator(to_return.first), 0));}
+		std::cout<<"root is "<<_root->val.first<<std::endl;
+		if (!to_return.second){
+			return (ft::pair<iterator, bool>(iterator(to_return.first), 0));}
 		_size++;
 		t_node	*node = to_return.first;
-		// if (node->parent)
 		// 	std::cout<<"........\n"<<node->color  << " ... " << node->parent->color<<"    "<<node->parent->val.first <<std::endl;
 		while(node->color == _RED && node->parent->color == _RED)
 		{
 			if (__brother_color(node->parent) == _RED)
 			{
-					// std::cout<<"hrer 0     "<<node->parent->val.first<<"\n";
+					std::cout<<"hrer 0     "<<node->parent->val.first<<"\n";
 				t_node *tem = node->parent;
 				tem->parent->color = _RED;
 				tem->color = _BLACK;
@@ -91,39 +146,36 @@ public:
 				bool	node_side = __get_node_side(node);
 				if (node_side == __get_node_side(node->parent) && node_side == _LEFT)
 				{
-					// std::cout<<"hrer 1\n";
+					std::cout<<"hrer 1\n";
 					node = __right_rotation(node->parent);
 				}
 				else if (node_side == __get_node_side(node->parent) && node_side == _RIGHT)
 				{
-					// std::cout<<"hrer 2\n";
+					std::cout<<"hrer 2\n";
 					node = __left_rotation(node->parent);
 				}
 				else if (node_side == _RIGHT)
 				{
-					// std::cout<<"hrer 3\n";
+					std::cout<<"hrer 3\n";
 					node = __angle_to_line_left_rotation(node->parent, node);
 				}
 				else
 				{
-					// std::cout<<"hrer 4\n";
+					std::cout<<"hrer 4\n";
 					node = __angle_to_line_right_rotation(node->parent, node);
 				}
 			}
 		}
+		std::cout<<"-----------------enserd "<<to_return.first->val.first<<std::endl;
 		return (ft::pair<iterator, bool>(iterator(to_return.first), 1));
 	}
-	map(){_root = nullptr;}
-	~map()
-	{
-		delete_map(_root);
-	}
+
 	void	p(t_node *node)
 	{
 
 		if ((!node->left && !node->right))
 		{
-		// std::cout<<": "<<node->val.first<<" "<<std::endl;
+		std::cout<<": "<<node->val.first<<" "<<std::endl;
 		return;
 		}
 		if (node->left)
@@ -131,13 +183,49 @@ public:
 		if (node->right)
 		p(node->right);
 	}
+
 	void	print()
 	{
 		p(_root);
 		
 	}
 
+//! ///////////////////////////////////////////////////////////
 
+//! Observers
+	// key_compare key_comp() const;
+	//! std::map::value_compare value_comp() const; 
+
+
+
+//! CAPACITY
+	bool		empty() {return !_size;}
+	size_type	size() {return _size;}
+	size_type	max_size() {return Alloc::MAX_SIZE;}
+
+
+//! Lookup
+	// size_type count( const Key& key ) const;
+	// iterator find( const Key& key );
+	// const_iterator find( const Key& key ) const;
+	// std::pair<iterator,iterator> equal_range( const Key& key );
+	// std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
+	// iterator lower_bound( const Key& key );
+	// const_iterator lower_bound( const Key& key ) const;
+	// iterator upper_bound( const Key& key );
+	// const_iterator upper_bound( const Key& key ) const;
+
+
+//! NON member functions
+// friend bool operator== ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+// friend bool operator!= ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+// friend bool operator<  ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+// friend bool operator<= ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+// friend bool operator>  ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+// friend bool operator>= ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+
+
+//! ///////////////////////////////////////////////////////////
 private:
 
 
@@ -154,11 +242,15 @@ private:
 		_allocat.construct(saver, t_node(v,par));
 		return	(saver);
 	}
+
 	void	__destroy_deallocate_node(t_node *node)
 	{
+		static int i = 0;
+		std::cout<<"i: "<<i++<<"\n";
 		_allocat.destroy(node);
 		_allocat.deallocate(node, sizeof(t_node));
 	}
+
 	ft::pair<t_node *, bool>	__add_node_to_BST_returnIT(const value_type &val)
 	{
 		if (!_root)
@@ -210,7 +302,7 @@ private:
 
 	bool	__get_node_side(t_node	*node)
 	{
-		if (node->parent && node->parent->left == node)
+		if (node && node->parent && node->parent->left == node)
 			return (_LEFT);
 		return (_RIGHT);
 	}
@@ -228,6 +320,7 @@ private:
 			new_node->parent->left = new_node;
 		return(__right_rotation(new_node));
 	}
+
 	t_node	*__angle_to_line_right_rotation(t_node *node, t_node *new_node) // mirror of __angle_to_line_left_rotation()
 	{
 		node->left = new_node->right;
@@ -263,6 +356,7 @@ private:
 			_root = node;
 		return (node);
 	}
+
 	t_node	*__left_rotation(t_node *node) // left/anti-clockwise rotaion    mirror of __right_rotation()
 	{
 		t_node	*gran_node =  node->parent;
@@ -309,15 +403,294 @@ private:
 		return (node->parent->left);
 	}
 
-void	delete_map(t_node *node)
-{
-	if (node->left)
-		delete_map(node->left);
-	if (node->right)
-		delete_map(node->right);
-	__destroy_deallocate_node(node);
-}
+	t_node	*__erase_node(t_node *node)
+	{
+		t_rep_info	rep;
+		t_rep_info	rep_x;
+		if (node->left && node->right)
+		{
+			t_node	*secsessor = __get_secsessor(node);
+			rep.parent = secsessor->parent;
+			rep.self = secsessor;
+			rep_x.parent = secsessor;
+			rep_x.self = secsessor->right;
+			rep_x._side = _RIGHT;
+			rep_x = __delete_node_with_one_or_two_children(node, rep, rep_x);
+			__next_deletion_step(node, rep, rep_x);
+		}
+		else if (node->left)
+		{
+			rep.parent = node;
+			rep.self = node->left;
+			rep_x = rep;
+			rep_x._side = _LEFT;
+			rep_x = __delete_node_with_one_or_two_children(node, rep, rep_x);
+			__next_deletion_step(node, rep, rep_x);
+		}
+		else if (node->right)
+		{
+			rep.parent = node;
+			rep.self = node->right;
+			rep_x = rep;
+			rep_x._side = _RIGHT;
+			rep_x = __delete_node_with_one_or_two_children(node, rep, rep_x);
+			__next_deletion_step(node, rep, rep_x);
+		}
+		else
+		{
+			rep.parent = node->parent;
+			rep.self = nullptr;
+			rep_x = __delete_node_with_no_children(node, rep_x);
+			if (rep_x.parent)
+				__next_deletion_step(node, rep, rep_x);
+		}
+		__destroy_deallocate_node(node);
+		return (rep.self);
+	}
 
-};                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+	t_node	*__get_secsessor(t_node *node)
+	{
+		node = node->right;
+		while (node->left)
+			node = node->left;
+		return 	(node);
+	}
+
+	t_rep_info	__delete_node_with_one_or_two_children(t_node *node, t_rep_info remp, t_rep_info rep_x)
+	{
+		if (node->parent)
+		{
+			if (__get_node_side(node) == _LEFT)
+				node->parent->left = remp.self;
+			else
+				node->parent->right = remp.self;
+		}
+		if (__get_node_side(remp.self) == _LEFT)
+		{
+			remp.self->parent->left = rep_x.self;
+			rep_x._side = _LEFT;
+		}
+		else
+		{
+			remp.self->parent->right = rep_x.self;
+			rep_x._side = _RIGHT;
+		}
+		rep_x.parent = remp.self->parent;
+		if (rep_x.self)
+			rep_x.self->parent = remp.self->parent;
+		remp.self->parent = node->parent;
+		remp.parent = node->parent;
+		remp.self->left = node->left;
+		remp.self->right = node->right;
+		return (rep_x);
+	}
+
+	t_rep_info	__delete_node_with_no_children(t_node *node, t_rep_info rep_x)
+	{
+		if (node->parent)
+		{
+			if (__get_node_side(node) == _LEFT)
+			{
+				node->parent->left = nullptr;
+				rep_x._side = _LEFT;
+			}
+			else
+			{
+				node->parent->right = nullptr;
+				rep_x._side = _RIGHT;
+			}
+		}
+		rep_x.parent = node->parent;
+		rep_x.self = nullptr;
+		return (rep_x);
+	}
+
+	void	__next_deletion_step(t_node *node, t_rep_info rep, t_rep_info rep_x)
+	{
+		// if (node->parent == rep_x.parent)
+		// 	exit(0);
+		if (node->color == _RED && rep.self && rep.self->color == _BLACK)
+		{
+			std::cout<<"step 1\n\n";
+			rep.self->color = _RED;
+			__fixUP_step(rep_x);
+		}
+		else if (node->color == _BLACK)
+		{
+			if (rep.self && rep.self->color == _RED)
+			{std::cout<<"step 2\n\n";
+				rep.self->color == _BLACK;
+			}else if (rep_x.self != _root)
+			{	std::cout<<"step 3\n\n";__fixUP_step(rep_x);}
+		}
+		std::cout<<"out\n\n";
+	}
+	// bool pk(){std::cout<<"here\n"; return (1);}
+	void	__fixUP_step(t_rep_info x)
+	{
+		t_rep_info w = __get_rep_sibling(x);
+		std::cout<<"w v: "<<w.self->val.first<<std::endl;
+		std::cout<<"w c: "<<w.self->color<<std::endl;
+		while (x.self != _root || (x.self && x.self->color == _RED))
+		{
+			if (x.self && x.self->color == _RED) // Node x is red
+			{
+				std::cout<<"case 0\n";
+				x.self->color = _BLACK;
+				return;
+			}
+			else if (w.self && w.self->color == _RED) // Node x is black and its sibling w is red
+			{
+				w.self->color = _BLACK;
+				x.parent->color = _RED;
+				if (__get_node_side(x.self) == _LEFT)
+				{
+					std::cout<<"case 1 left\n";
+					__deletion_left_rotation(x.parent);
+					w.self = x.parent->right;
+					w.parent = x.parent;
+					w._side = _RIGHT;
+				}
+				else
+				{
+					std::cout<<"case 1 right\n";
+					__deletion_right_rotation(x.parent);
+					w.self = x.parent->left;
+					w.parent = x.parent;
+					w._side = _LEFT;
+				}
+			}
+			// else if (!w.self)
+			// {
+			// 	exit(1);
+			// }
+			else if ((!w.self->left || !w.self->left->color == _BLACK) && (!w.self->right || !w.self->left->color == _BLACK)) //Node x is black, its sibling w is black, and both of w's children are black
+			{
+				std::cout<<"case 2\n";
+				w.self->color = _RED;
+				x.self = x.parent;
+				x.parent = x.parent->parent;
+				x._side = __get_node_side(x.self);
+				if (!x.parent)
+					return;
+				// std::cout<<"w v: "<<w.self->val.first<<std::endl;
+				// std::cout<<"w c: "<<w.self->color<<std::endl;
+				// std::cout<<"x v: "<<x.self->val.first<<std::endl;
+				// std::cout<<"x c: "<<x.self->color<<std::endl;
+			}
+			// Node x is black, its sibling w is black, and
+			else if (__get_node_side(x.self) == _LEFT && w.self && w.self->left && w.self->left->color == _RED\
+				&& ( !w.self->right || w.self->right->color == _BLACK)) //If x is the left child, w's left child is red and w's right child is black
+			{
+				std::cout<<"case 3.0\n";
+				w.self->left->color = _BLACK;
+				w.self->color = _RED;
+				__deletion_right_rotation(w.self);
+				w.self = x.parent->right;
+				w.parent = x.parent;
+				w._side = _RIGHT;
+			}
+			else if (__get_node_side(x.self) == _RIGHT && w.self && w.self->right && w.self->right->color == _RED\
+				&& ( !w.self->left || w.self->left->color == _BLACK)) // If x is the right child, w's right child is red and w's left child is black
+			{
+				std::cout<<"case 3.1\n";
+				w.self->right->color = _BLACK;
+				w.self->color = _RED;
+				__deletion_left_rotation(w.self);
+				w.self = x.parent->left;
+				w.parent = x.parent;
+				w._side = _LEFT;
+			}
+			//  Node x is black, its sibling w is black, and
+			else if (__get_node_side(x.self) == _LEFT && w.self && w.self->right && w.self->right->color == _RED) // • If x is the left child, w's right child is red
+			{
+				std::cout<<"case 4.0\n";
+				w.self->color = x.parent->color;
+				x.parent = _BLACK;
+				w.self->right->color = _BLACK;
+				__deletion_left_rotation(x.parent);
+				w.parent = w.self->parent;
+				x.parent = x.self->parent;
+				w._side = __get_node_side(w.self);
+				x._side = __get_node_side(x.self);
+				return ;
+			}
+			else if (__get_node_side(x.self) == _RIGHT && w.self && w.self->left && w.self->left->color == _RED) //• If x is the right child, w's left child is red
+			{
+				std::cout<<"case 4.1\n";
+				w.self->color = x.parent->color;
+				x.parent = _BLACK;
+				w.self->left->color = _BLACK;
+				__deletion_right_rotation(x.parent);
+				w.parent = w.self->parent;
+				x.parent = x.self->parent;
+				w._side = __get_node_side(w.self);
+				x._side = __get_node_side(x.self);
+				return ;
+			}
+		}
+	}
+
+	t_rep_info	__get_rep_sibling(t_rep_info remp_x)
+	{
+		t_rep_info tem;
+		if (remp_x._side == _LEFT)
+		{
+			tem.self = remp_x.parent->right;
+			tem.parent = remp_x.parent;
+			tem._side = _RIGHT;
+			return (tem);
+		}
+		tem.self = remp_x.parent->left;
+		tem.parent = remp_x.parent;
+		tem._side = _LEFT;
+		return (tem);
+	}
+	void	clear_it(t_node *node)
+	{
+		if (node->left)
+			clear_it(node->left);
+		if (node->right)
+			clear_it(node->right);
+		if (__get_node_side(node) == _LEFT)
+			node->parent->left = nullptr;
+		else if (node->parent)
+			node->parent->right = nullptr;
+		__destroy_deallocate_node(node);
+	}
+	void	__deletion_left_rotation(t_node	*node)
+	{
+		t_node	*rh_child = node->right;
+		if (__get_node_side(node) == _LEFT)
+			node->parent->left = rh_child;
+		else if (node->parent)
+			node->parent->right = rh_child;
+		rh_child->parent = node->parent;
+		node->right = rh_child->left;
+		if (node->right)
+			node->right->parent = node;
+		rh_child->left = node;
+		node->parent = rh_child;
+		if (_root == node)
+			_root = rh_child;
+	}
+	void	__deletion_right_rotation(t_node	*node)
+	{
+		t_node	*lf_child = node->left;
+		if (__get_node_side(node) == _LEFT)
+			node->parent->right = lf_child;
+		else if (node->parent)
+			node->parent->right = lf_child;
+		lf_child->parent = node->parent;
+		node->left = lf_child->right;
+		if (node->left)
+			node->left->parent = node;
+		lf_child->right = node;
+		node->parent = lf_child;
+		if (_root == node)
+			_root = lf_child;
+	}
+
+};
 }
 #endif

@@ -26,10 +26,10 @@
 #include <iostream>
 #include <algorithm>
 #include <deque>
-#include "map/red_black_tree.hpp"
+// #include "map/red_black_tree.hpp"
 
 
-int main()
+int maizn()
 {
    // rbtree<ft::pair<int, int>, int> a;
    // for (size_t i = 0; i < 50; i++)
@@ -39,22 +39,23 @@ int main()
    // }
    // std::cout<<a.serch(ft::pair<int, int>(7, 33))->val->first<<std::endl;
    
-int g[100] = {0};
+// int g[100] = {0};
 // // while(1){
 //       srand(time(0));
 //    // {
    ft::map<int, int> mp;
 //    // std::cout<<"=========================================================\n=========================================================\n";
-   for (size_t i = 0; i < 100; i++)
+   for (size_t i = 0; i < 50; i++)
    {
-      int k = rand()%500000;
+      int k = rand()%20;
       // g[i] = k;
-      // std::cout<<"K: "<<k<<std::endl;
-      mp.insert(ft::pair<int, int>(i,i));
+      std::cout<<"K: "<<k<<std::endl;
+      mp.insert(ft::pair<int, int>(k,i));
    }
    ft::map<int, int>::iterator a = mp.begin();
 
-   std::cout<<"s'\n"<<(*a).first<<"s'\n"<<std::endl;
+   std::cout<<"s"<<(*a).first<<"s'\n"<<std::endl;
+   // exit(0);
    // ++a;
    // std::cout<<(*a).first<<std::endl;
    // ++a;
@@ -64,10 +65,29 @@ int g[100] = {0};
    // std::cout<<(*a).first<<std::endl;
    // std::cout<<(*(mp.erase(a))).first<<std::endl;
    // mp.print();
+
+   mp.erase(a);
+   a = mp.begin();
+   mp.erase(a);
+   a = mp.begin();
+   mp.erase(a);
+   a = mp.begin();
+   mp.erase(a);
+   a = mp.begin();
+   mp.erase(a);
+   a = mp.begin();
+   mp.erase(a);
+   a = mp.begin();
+   mp.erase(a);
+   a = mp.begin();
+   mp.erase(a);
+   a = mp.begin();
+   mp.erase(a);
+   a = mp.begin();
    mp.erase(a);
    // exit(0);
    // a = mp.begin();
-   // std::cout<<(*a).first<<std::endl;
+   // std::cout<<"scgxcv\n"<<std::endl;
    //}}
    // mp.erase(6)
    // for (auto &i : mp)
@@ -76,6 +96,11 @@ int g[100] = {0};
    // }
    // ft::map<int, int> a;
    // a.insert(ft::pair<int, int>(1,2));
-
+   return (0);
 }
  
+int main()
+{
+   maizn();
+   // system("leaks container");
+}

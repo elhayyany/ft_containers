@@ -112,10 +112,13 @@ public:
 
 //! ////////////////////
 
+//? DELETE 
 	iterator erase( iterator pos )
 	{
 		return iterator(__erase_node(pos.base()));
 	}
+
+//? INSERT 
 
 	ft::pair<iterator, bool>	insert(const value_type& val)
 	{
@@ -231,7 +234,7 @@ private:
 
 	typedef typename Alloc::template rebind<t_node>::other _node_allocator;
 	// typedef typename _allocator::template rebind<Node>::other _node_allocator_type;
-	t_node			*_root = nullptr;
+	t_node			*_root;
 	size_t			_size;
 	Compare			_com;
 	_node_allocator	_allocat;
@@ -245,8 +248,6 @@ private:
 
 	void	__destroy_deallocate_node(t_node *node)
 	{
-		static int i = 0;
-		std::cout<<"i: "<<i++<<"\n";
 		_allocat.destroy(node);
 		_allocat.deallocate(node, sizeof(t_node));
 	}
@@ -353,7 +354,10 @@ private:
 		node->color = _BLACK;
 		gran_node->color = _RED;
 		if (_root == gran_node)
+		{
 			_root = node;
+			node->parent = nullptr;
+		}
 		return (node);
 	}
 
@@ -377,7 +381,10 @@ private:
 		node->color = _BLACK;
 		gran_node->color = _RED;
 		if (_root == gran_node)
+		{
 			_root = node;
+			node->parent = nullptr;
+		}
 		return (node);
 	}
 
@@ -409,35 +416,42 @@ private:
 		t_rep_info	rep_x;
 		if (node->left && node->right)
 		{
+			std::cout<<"node with two children"<<std::endl;
 			t_node	*secsessor = __get_secsessor(node);
 			rep.parent = secsessor->parent;
 			rep.self = secsessor;
 			rep_x.parent = secsessor;
 			rep_x.self = secsessor->right;
 			rep_x._side = _RIGHT;
-			rep_x = __delete_node_with_one_or_two_children(node, rep, rep_x);
+			rep_x = __delete_node_with_two_children(node, rep, rep_x);
 			__next_deletion_step(node, rep, rep_x);
 		}
 		else if (node->left)
 		{
+			std::cout<<"node with LEFT child"<<std::endl;
 			rep.parent = node;
 			rep.self = node->left;
+			rep._side = __get_node_side(node);
 			rep_x = rep;
 			rep_x._side = _LEFT;
-			rep_x = __delete_node_with_one_or_two_children(node, rep, rep_x);
+			rep_x = __delete_node_with_one_child(node, rep);
 			__next_deletion_step(node, rep, rep_x);
 		}
 		else if (node->right)
 		{
+			std::cout<<"node with RIGHT child"<<std::endl;
+			std::cout<<__get_node_side(node)<<std::endl;
 			rep.parent = node;
 			rep.self = node->right;
+			rep._side = __get_node_side(node);
 			rep_x = rep;
 			rep_x._side = _RIGHT;
-			rep_x = __delete_node_with_one_or_two_children(node, rep, rep_x);
+			rep_x = __delete_node_with_one_child(node, rep);
 			__next_deletion_step(node, rep, rep_x);
 		}
 		else
 		{
+			std::cout<<"node with NO children"<<std::endl;
 			rep.parent = node->parent;
 			rep.self = nullptr;
 			rep_x = __delete_node_with_no_children(node, rep_x);
@@ -456,8 +470,11 @@ private:
 		return 	(node);
 	}
 
-	t_rep_info	__delete_node_with_one_or_two_children(t_node *node, t_rep_info remp, t_rep_info rep_x)
+	t_rep_info	__delete_node_with_two_children(t_node *node, t_rep_info remp, t_rep_info rep_x)
 	{
+		// exit(0);
+		std::cout<<"node: "<<node->val.first<<"\t"<<"parent:  "<<node->parent->val.first<<"\t"<<"right child: "<<node->right->val.first<<std::endl;
+		std::cout<<"node: "<<remp.self->val.first<<"\t"<<"parent:  "<<remp.self->parent->val.first<<std::endl;
 		if (node->parent)
 		{
 			if (__get_node_side(node) == _LEFT)
@@ -481,9 +498,38 @@ private:
 		remp.self->parent = node->parent;
 		remp.parent = node->parent;
 		remp.self->left = node->left;
+		if (node->left)
+			node->left->parent = remp.self;
 		remp.self->right = node->right;
+		if (node->right)
+			node->right->parent = remp.self;
+		std::cout<<"node: "<<remp.self->val.first<<"\t"<<"parent:  "<<remp.self->parent->val.first<<std::endl;
+		std::cout<<"node: "<<remp.self->val.first<<"\t"<<"parent:  "<<remp.self->parent->val.first<<std::endl;
+
+		exit(0);
 		return (rep_x);
 	}
+
+	t_rep_info	__delete_node_with_one_child(t_node *node, t_rep_info remp)
+	{
+		if (node->parent)
+		{
+			if (__get_node_side(node) == _LEFT)
+			{
+				node->parent->left = remp.self;
+				remp._side = _LEFT;
+			}	
+			else
+			{
+				remp._side = _RIGHT;
+				node->parent->right = remp.self;
+			}
+		}
+		remp.self->parent = node->parent;
+		remp.parent = node->parent;
+		return (remp);
+	}
+
 
 	t_rep_info	__delete_node_with_no_children(t_node *node, t_rep_info rep_x)
 	{
@@ -519,7 +565,7 @@ private:
 		{
 			if (rep.self && rep.self->color == _RED)
 			{std::cout<<"step 2\n\n";
-				rep.self->color == _BLACK;
+				rep.self->color = _BLACK;
 			}else if (rep_x.self != _root)
 			{	std::cout<<"step 3\n\n";__fixUP_step(rep_x);}
 		}
@@ -648,8 +694,12 @@ private:
 	}
 	void	clear_it(t_node *node)
 	{
+		static int i    = 0;
+		if (!node)
+			return ;
 		if (node->left)
 			clear_it(node->left);
+		std::cout<<i++<<std::endl;
 		if (node->right)
 			clear_it(node->right);
 		if (__get_node_side(node) == _LEFT)

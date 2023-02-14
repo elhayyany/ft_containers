@@ -73,7 +73,7 @@ int maizn()
       mp.insert(ft::pair<int, int>(-11,4));
    mp.erase(a);
       mp.insert(ft::pair<int, int>(100,4));
-   mp.erase(a);
+   // mp.erase(a);
    // a = mp.begin();
    // mp.erase(a);
    // a = mp.begin();

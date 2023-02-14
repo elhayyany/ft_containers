@@ -45,9 +45,9 @@ int maizn()
 //    // {
    ft::map<int, int> mp;
 //    // std::cout<<"=========================================================\n=========================================================\n";
-   for (size_t i = 0; i < 50; i++)
+   for (size_t i = 0; i < 20; i++)
    {
-      int k = rand()%20;
+      int k = rand()%30;
       // g[i] = k;
       std::cout<<"K: "<<k<<std::endl;
       mp.insert(ft::pair<int, int>(k,i));
@@ -65,26 +65,34 @@ int maizn()
    // std::cout<<(*a).first<<std::endl;
    // std::cout<<(*(mp.erase(a))).first<<std::endl;
    // mp.print();
-
+   // mp.dele();
    mp.erase(a);
-   a = mp.begin();
    mp.erase(a);
-   a = mp.begin();
+      mp.insert(ft::pair<int, int>(99,4));
+      mp.insert(ft::pair<int, int>(-9,4));
+      mp.insert(ft::pair<int, int>(-11,4));
    mp.erase(a);
-   a = mp.begin();
+      mp.insert(ft::pair<int, int>(100,4));
    mp.erase(a);
-   a = mp.begin();
-   mp.erase(a);
-   a = mp.begin();
-   mp.erase(a);
-   a = mp.begin();
-   mp.erase(a);
-   a = mp.begin();
-   mp.erase(a);
-   a = mp.begin();
-   mp.erase(a);
-   a = mp.begin();
-   mp.erase(a);
+   // a = mp.begin();
+   // mp.erase(a);
+   // a = mp.begin();
+   // mp.erase(a);
+   // a = mp.begin();
+   // mp.erase(a);
+   // a = mp.begin();
+   // mp.erase(a);
+   // a = mp.begin();
+   // mp.erase(a);
+   // a = mp.begin();
+   // mp.erase(a);
+   // // exit(0);
+   // a = mp.begin();
+   // mp.erase(a);
+   // a = mp.begin();
+   // mp.erase(a);
+   // a = mp.begin();
+   // mp.erase(a);
    // exit(0);
    // a = mp.begin();
    // std::cout<<"scgxcv\n"<<std::endl;

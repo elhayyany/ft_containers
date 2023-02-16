@@ -45,7 +45,7 @@ int maizn()
 //    // {
    ft::map<int, int> mp;
 //    // std::cout<<"=========================================================\n=========================================================\n";
-   for (size_t i = 0; i < 20; i++)
+   for (size_t i = 0; i < 5; i++)
    {
       int k = rand()%30;
       // g[i] = k;
@@ -53,8 +53,43 @@ int maizn()
       mp.insert(ft::pair<int, int>(k,i));
    }
    ft::map<int, int>::iterator a = mp.begin();
-
-   std::cout<<"s"<<(*a).first<<"s'\n"<<std::endl;
+   // (*a).first = 2;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   ++a;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   ++a;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   ++a;
+   mp.erase(a);
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   a = mp.begin();
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   ++a;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   ++a;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   ++a;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   a--;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   a--;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   a--;
+   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   a--;
+   // a++;
+   // a++;
+   // a++;
+   // a++;
+   // a++;
+   // a--;
+   // a--;
+   // a--;
+   // a--;
+   // a--;
+   // a--;
+   // a--;
+   // std::cout<<"s"<<(*a).first<<"s'\n"<<std::endl;
    // exit(0);
    // ++a;
    // std::cout<<(*a).first<<std::endl;
@@ -66,14 +101,14 @@ int maizn()
    // std::cout<<(*(mp.erase(a))).first<<std::endl;
    // mp.print();
    // mp.dele();
-   mp.erase(a);
-   mp.erase(a);
-      mp.insert(ft::pair<int, int>(99,4));
-      mp.insert(ft::pair<int, int>(-9,4));
-      mp.insert(ft::pair<int, int>(-11,4));
-   mp.erase(a);
-      mp.insert(ft::pair<int, int>(100,4));
-   mp.erase(a);
+   // mp.erase(a);
+   // mp.erase(a);
+   //    mp.insert(std::pair<int, int>(99,4));
+   //    mp.insert(ft::pair<int, int>(-9,4));
+   //    mp.insert(ft::pair<int, int>(-11,4));
+   // mp.erase(a);
+   //    mp.insert(ft::pair<int, int>(100,4));
+   // mp.erase(a);
    // a = mp.begin();
    // mp.erase(a);
    // a = mp.begin();

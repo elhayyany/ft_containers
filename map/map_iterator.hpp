@@ -46,10 +46,7 @@ public:
 
 	map_iterator(): _root(nullptr), _root_tem(nullptr) {}
 	map_iterator(_NodePtr node): _root(node), _root_tem(node) {_root = _get_left(_root);}
-	map_iterator(const map_iterator& it) : _root(it._root), _root_tem(it._root)
-	{
-		_root = _get_left(_root);
-	}
+	map_iterator(const map_iterator& it) : _root(it._root), _root_tem(it._root) {}
 	map_iterator&	operator=(const map_iterator& it) 
 	{
 		_root = it._root;
@@ -61,71 +58,116 @@ public:
 
 	map_iterator& operator++()
 	{
-		if (_root && _root->right)
-		{
-			_root = _root->right;
-			_root = _get_left(_root);
-		}
-		else if (_root && __get_node_side(_root) == _LEFT)
-		{
-			_root = _root->parent;
-		}
-		else
-		{
-			while (_root && _root->parent && __get_node_side(_root) == _RIGHT)
-			{
-				_root = _root->parent;
-			}
-			
-		}
-
-
-
-
-		if (_root->right)
-			_root = _root->right;
-		else if (_root->parent && _root->parent->right)
-		{
-			_root = _get_left(_root->parent->right);
-		}
-		else 
+		if (__get_node_side(_root) == _LEFT || !_root->parent)
 		{
 			_root_tem = _root;
-			_root = nullptr;
+			if (_root->right)
+				_root = _get_left(_root->right);
+			if (_root == _root_tem)
+				_root = _root->parent;
+			return (*this);
+		}
+		else if (_root->parent)
+		{
+			while (__get_node_side(_root) == _RIGHT && _root->parent)
+				_root = _root->parent;
+			if (!_root->parent)
+			{
+				_root_tem = _get_right(_root);
+				_root = nullptr;
+				return (*this);
+			}
+			_root = _root->parent;
+			return (*this);
 		}
 		return (*this);
 	}
-	map_iterator operator++(int);
+	map_iterator operator++(int)
+	{
+		map_iterator	tem = *this;
+		if (__get_node_side(_root) == _LEFT || !_root->parent)
+		{
+			_root_tem = _root;
+			if (_root->right)
+				_root = _get_left(_root->right);
+			if (_root == _root_tem)
+				_root = _root->parent;
+			return (tem);
+		}
+		else if (_root->parent)
+		{
+			while (__get_node_side(_root) == _RIGHT && _root->parent)
+				_root = _root->parent;
+			if (!_root->parent)
+			{
+				_root_tem = _get_right(_root);
+				_root = nullptr;
+				return (tem);
+			}
+			_root = _root->parent;
+			return (tem);
+		}
+		return (tem);
+	}
 
 	map_iterator& operator--()
 	{
-		if (!_root)
+		_root_tem = _root;
+		// std::cout<<_root->val.first<<std::endl;
+		// std::cout<<_root->left->val.first<<std::endl;
+		// std::cout<<_root->right<<std::endl;
+		// exit(0);
+		if (__get_node_side(_root) == _RIGHT && _root->parent)
 		{
-			_root = _root_tem;
-			return (_root);
+			if (_root->left)
+				_root = _get_right(_root->left);
+			if (_root == _root_tem)
+				_root = _root->parent;
+			return (*this);
 		}
-		if (_root->parent && _root->parent->left)
+		if (_root->left)
+			_root = _root->left;
+		else
 		{
-			_root = _get_right(_root->parent->left);
-		}
-		else if (_root->parent)
+			while (__get_node_side(_root) == _LEFT)
+				_root = _root->parent;
 			_root = _root->parent;
-		else 
-		{
-			_root_tem = _root;
-			_root = nullptr;
+			
 		}
 		return (*this);
 	}
-	map_iterator operator--(int);
+	map_iterator operator--(int)
+	{
+		map_iterator	tem = *this;
+		_root_tem = _root;
+		if (__get_node_side(_root) == _RIGHT && _root->parent)
+		{
+			if (_root->left)
+				_root = _get_right(_root->left);
+			if (_root == _root_tem)
+				_root = _root->parent;
+			
+			return (tem);
+		}
+		if (_root->left)
+			_root = _root->left;
+		else
+		{
+			while (__get_node_side(_root) == _LEFT)
+				_root = _root->parent;
+			_root = _root->parent;
+			
+		}
+		return (tem);
+	}
 
 	_NodePtr base(){return (_root);}
 
 	bool	operator==(map_iterator& it) {return (_root == it._root);}
 	bool	operator!=(map_iterator& it) {return (_root != it._root);}
 
-	ft::pair<key, T>	operator*()  { return (_root->val); }
-	ft::pair<key, T>	operator->() { return ((_root->val)); }
+	const ft::pair<key, T>	operator*()  { return (_root->val); }
+	const ft::pair<key, T>	operator->() { return ((_root->val)); }
 
 private:	
 	_NodePtr	_root;
@@ -142,7 +184,7 @@ private:
 			it = it->right;
 		return (it);
 	}
-	bool	__get_node_side(_NodePtr *node)
+	bool	__get_node_side(_NodePtr	node)
 	{
 		if (node && node->parent && node->parent->left == node)
 			return (_LEFT);

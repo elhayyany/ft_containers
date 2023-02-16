@@ -115,8 +115,7 @@ public:
 //? DELETE 
 	iterator erase( iterator pos )
 	{
-		pos.base();
-		return iterator(__erase_node(_root->left));
+		return iterator(__erase_node(pos.base()));
 	}
 
 
@@ -479,8 +478,8 @@ private:
 	t_rep_info	__delete_node_with_two_children(t_node *node, t_rep_info remp, t_rep_info rep_x)
 	{
 		// exit(0);
-		// std::cout<<"node: "<<node->val.first<<"\n";
-		// std::c÷out<<"node: "<<rep_x.self->val.first<<"\t"<<"parent:  "<<rep_x.self->parent->val.first<<std::endl;
+		std::cout<<"node: "<<node->val.first  <<"  "<<node->parent<<"\n";
+		std::cout<<"parent:  "<<remp.self->val.first<<std::endl;
 		// exit(0);
 		if (node->parent)
 		{
@@ -495,22 +494,23 @@ private:
 			remp.self->parent->left = rep_x.self;
 			rep_x._side = _LEFT;
 		}
-		else
+		else if (remp.self->parent != node )
 		{
+			
 			remp.self->parent->right = rep_x.self;
 			rep_x._side = _RIGHT;
+			rep_x.parent = remp.self->parent;
+			if (rep_x.self)
+				rep_x.self->parent = remp.self->parent;
 		}
-		rep_x.parent = remp.self->parent;
-		if (rep_x.self)
-			rep_x.self->parent = remp.self->parent;
 		remp.self->parent = node->parent;
 		remp.parent = node->parent;
 		remp.self->left = node->left;
 		if (node->left)
 			node->left->parent = remp.self;
-		if (remp.self != node->right)
+		if (remp.self != node->right && remp.self != node->right)
 			remp.self->right = node->right;
-		if (node->right)
+		if (node->right && remp.self != node->right)
 			node->right->parent = remp.self;
 		// std::cout<<"node: "<<remp.self->val.first<<"\t"<<"parent:  "<<remp.self->parent->val.first<<std::endl;
 		// std::cout<<"node: "<<remp.self->val.first<<"\t"<<"parent:  "<<remp.self->parent->val.first<<std::endl;
@@ -762,8 +762,6 @@ private:
 			node->parent->right = lf_child;
 		else if (node->parent)
 			node->parent->right = lf_child;
-		std::cout<<lf_child<<std::endl;
-		exit(0);
 		lf_child->parent = node->parent;
 		node->left = lf_child->right;
 		if (node->left)

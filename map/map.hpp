@@ -17,6 +17,7 @@
 #include <memory>
 #include <exception>
 #include "map_iterator.hpp"
+#include "map_reverse_iterator.hpp"
 
 #define  _INSERTION	1
 #define  _DELETION	0
@@ -64,25 +65,27 @@ public:
 
 
 public:
-	typedef     				Key											key_type;
-	typedef     				T											mapped_type;
-	typedef						ft::pair<const	Key, T>						value_type;
-	typedef						size_t										size_type;
-	typedef	typename			std::ptrdiff_t								difference_type;
-	typedef						Compare										key_compare;
-	typedef						Alloc										allocator_type;
-	typedef	typename			Alloc::reference							reference;
-	typedef	typename			Alloc::const_reference						const_reference;
-	typedef typename			Alloc::pointer								pointer;
-	typedef	typename			Alloc::const_pointer						const_pointer;
-	typedef						map_iterator<Key, T, t_node *>				iterator;
-	// typedef						map_iterator<Key, T, rbtree*>				const_iterator;
-	// typedef			reverse_iterator;
-	// typedef			const_reverse_iterator;
+	typedef     				Key														key_type;
+	typedef     				T														mapped_type;
+	typedef						ft::pair<const	Key, T>									value_type;
+	typedef						size_t													size_type;
+	typedef	typename			std::ptrdiff_t											difference_type;
+	typedef						Compare													key_compare;
+	typedef						Alloc													allocator_type;
+	typedef	typename			Alloc::reference										reference;
+	typedef	typename			Alloc::const_reference									const_reference;
+	typedef typename			Alloc::pointer											pointer;
+	typedef	typename			Alloc::const_pointer									const_pointer;
+	typedef						map_iterator<Key, T, t_node *>							iterator;
+	typedef						map_iterator<Key, T, const t_node*>						const_iterator;
+	typedef						map_reverse_iterator<iterator, t_node *, Key, T>		reverse_iterator;
+	typedef						map_reverse_iterator<const_iterator, t_node *, Key, T>	const_reverse_iterator;
 
 //! //////////////////////////////////////
 	
 	void	clear()	{clear_it(_root);}
+	iterator find (const key_type& k);
+	const_iterator find (const key_type& k) const;
 //! //////////////////// 
 //* CONSTRUCTERS:
 	map(): _root(nullptr) {};
@@ -96,19 +99,22 @@ public:
 //! ////////////////////
 
 
-
+	t_node	*__get_rightest(t_node *node) 
+	{
+		while (node && node->right)
+			node = node->right;
+		return (node);
+	}
 //! Iterators
 	
 	iterator					begin() {return (iterator(_root));}
-	// const_iterator				begin() const {return (iterator(_root));}
-	iterator					end() {return (iterator(_root));}
-	// const_iterator				end() const {return (iterator(_root));}
-	// reverse_iterator			rbegin() {register_t}
-	// const_reverse_iterator		rbegin() const {register_t}
-	// reverse_iterator			rend() {register_t}
-	// const_reverse_iterator		rend() const {register_t}
-	iterator find (const key_type& k);
-	// const_iterator find (const key_type& k) const;
+	const_iterator				begin() const {return (const_iterator(_root));}
+	iterator					end() {return (++iterator(__get_rightest(_root), true));}
+	const_iterator				end() const {return (++const_iterator(__get_rightest(_root), true));}
+	reverse_iterator			rbegin() {return (reverse_iterator(end()));}
+	const_reverse_iterator		rbegin() const {return (reverse_iterator(end()));}
+	reverse_iterator			rend() {return (reverse_iterator(begin()));}
+	const_reverse_iterator		rend() const {return (reverse_iterator(begin()));}
 
 //! ////////////////////
 

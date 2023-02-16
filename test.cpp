@@ -52,31 +52,47 @@ int maizn()
       std::cout<<"K: "<<k<<std::endl;
       mp.insert(ft::pair<int, int>(k,i));
    }
-   ft::map<int, int>::iterator a = mp.begin();
+   // ft::map<int, int>::iterator a = mp.begin();
    // (*a).first = 2;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   ++a;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   ++a;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   ++a;
-   mp.erase(a);
    // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   a = mp.begin();
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   ++a;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   ++a;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   ++a;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   a--;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   a--;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   a--;
-   std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
-   a--;
+   // ++a;
+   for (ft::map<int, int>::iterator i = mp.end(); i != mp.begin();)
+   {
+      --i;
+      // std::cout<<"--- "<<(i).base()<<" ..'\n"<<std::endl;
+   }
+   
+   // ++a;
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // ++a;
+   // mp.erase(a);
+   // // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // a = mp.begin();
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // ++a;
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // ++a;
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // ++a;
+   // std::cout<<"-- "<<(*a).first<<" ..'\n"<<std::endl;
+   // a++;
+   // // std::cout<<".. "<<a.base()<<" ..'\n"<<std::endl;
+   // // exit(00);
+   // a--;
+
+   // std::cout<<".. "<<(*a--).first<<" ..'\n"<<std::endl;
+   // std::cout<<".. "<<(*a--).first<<" ..'\n"<<std::endl;
+   // // a--;
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // a--;
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // ++a;
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // ++a;
+   // std::cout<<"-- "<<(*a).first<<" ..'\n"<<std::endl;
+   // a--;
+   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
+   // std:÷:cout<<".. "<<a.base()<<" ..'\n"<<std::endl;
    // a++;
    // a++;
    // a++;

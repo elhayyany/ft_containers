@@ -1,10 +1,6 @@
-logs.txt
-m.tldr
-test.o
+*.txt
+*.tldr
+*.o
 container
 .vscode
-map1.hpp
-map2.hpp
-red_black_tree.hpp
-trash.txt
-todo.todo
+*.todo

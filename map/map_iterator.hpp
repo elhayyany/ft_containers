@@ -62,8 +62,6 @@ public:
 	{
 		if (__get_node_side(_root) == _LEFT || !_root->parent)
 		{
-			std::cout<<"shjghjs\n";
-			exit(0);
 			_root_tem = _root;
 			if (_root->right)
 				_root = _get_left(_root->right);
@@ -89,8 +87,6 @@ public:
 			return (*this);
 		}
 
-			std::cout<<"_root"<<"\n";
-			exit(0);
 		return (*this);
 	}
 	map_iterator operator++(int)
@@ -102,32 +98,36 @@ public:
 
 	map_iterator& operator--()
 	{
+		// std::cout<<_root_tem<<std::endl;exit(0);
 		if (!_root)
 		{
 			_root = _root_tem;
-			std::cout<<_root_tem<<std::endl;
-			exit(0);
 			return (*this);
 		}
-		_root_tem = _root;
+		_root_tem = _root; 
 		// std::cout<<_root->val.first<<std::endl;
 		// std::cout<<_root->left->val.first<<std::endl;
 		// std::cout<<_root->right<<std::endl;
 		// exit(0);
-		if (__get_node_side(_root) == _RIGHT && _root->parent)
+		if (__get_node_side(_root) == _RIGHT || !_root->parent)
 		{
 			if (_root->left)
+			{
 				_root = _get_right(_root->left);
+				return (*this);
+			}
 			if (_root == _root_tem)
-				_root = _root->parent;
+					_root = _root->parent;
+			
 			return (*this);
 		}
 		else if (__get_node_side(_root) == _LEFT && !_root->left)
 		{
+			// exit(0);
 			while (__get_node_side(_root) == _LEFT)
 				_root = _root->parent;
-			_root = _root->parent;
-			if (_root)
+			// if (_root)
+			// 	_root = _root->parent;
 			return (*this);
 		}
 
@@ -153,17 +153,19 @@ private:
 	_NodePtr	_root;
 	_NodePtr	_root_tem;
 	_NodePtr	_base;
-	pointer	_get_left(pointer& it)
+	pointer	_get_left(const pointer& it) const
 	{
-		while(it && it->left)
-			it = it->left;
-		return (it);
+		pointer	tem = it;
+		while(tem && tem->left)
+			tem = tem->left;
+		return (tem);
 	}
-	pointer	_get_right(pointer& it)
+	pointer	_get_right(const pointer& it) const
 	{
-		while(it && it->right)
-			it = it->right;
-		return (it);
+		pointer	tem = it;
+		while(tem && tem->right)
+			tem = tem->right;
+		return (tem);
 	}
 	bool	__get_node_side(_NodePtr	node)
 	{

@@ -44,6 +44,7 @@ int maizn()
 //       srand(time(0));
 //    // {
    ft::map<int, int> mp;
+   ft::map<int, int> mpp;
 //    // std::cout<<"=========================================================\n=========================================================\n";
    for (size_t i = 0; i < 5; i++)
    {
@@ -59,9 +60,10 @@ int maizn()
    for (ft::map<int, int>::iterator i = mp.end(); i != mp.begin();)
    {
       --i;
-      // std::cout<<"--- "<<(i).base()<<" ..'\n"<<std::endl;
+      std::cout<<"--- "<<(*i).first<<" ..'\n"<<std::endl;
    }
-   
+   mpp = mp;
+   mp.get_allocator();
    // ++a;
    // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
    // ++a;

@@ -84,33 +84,46 @@ public:
 //! //////////////////////////////////////
 	
 	void	clear()	{clear_it(_root);}
-	iterator find (const key_type& k);
-	const_iterator find (const key_type& k) const;
 //! //////////////////// 
 //* CONSTRUCTERS:
 	map(): _root(nullptr) {};
 	explicit map( const Compare& comp, const Alloc& alloc = Alloc()): Alloc(alloc), _com(comp){}
-	// template< class InputIt >
-	// map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _allocator(alloc), _com(comp){}
-	map( const map& other );
+	template< class InputIt >
+	map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _allocat(alloc), _com(comp)
+	{
+		insert(first, last);
+	}
+	map( const map& other )
+	{
+		insert(other.begin(), other.end());
+	}
 	~map() { clear(); };
-	map& operator=( const map& other );
+	map& operator=( const map& other )
+	{
+		insert(other.begin(), other.end());
+		return (*this);
+	}
 	allocator_type get_allocator() const {return(_allocat);}
 //! ////////////////////
 
 
-	t_node	*__get_rightest(t_node *node) 
-	{
-		while (node && node->right)
-			node = node->right;
-		return (node);
-	}
+	
 //! Iterators
 	
 	iterator					begin() {return (iterator(_root));}
 	const_iterator				begin() const {return (const_iterator(_root));}
-	iterator					end() {return (++iterator(__get_rightest(_root), true));}
-	const_iterator				end() const {return (++const_iterator(__get_rightest(_root), true));}
+	iterator					end() 
+	{
+		iterator	ij = iterator(__get_rightest(_root));
+		++ij;
+		return (ij);
+	}
+	const_iterator				end() const 
+	{
+		const_iterator	ij = const_iterator(__get_rightest(_root));
+		++ij;
+		return (ij);
+	}
 	reverse_iterator			rbegin() {return (reverse_iterator(end()));}
 	const_reverse_iterator		rbegin() const {return (reverse_iterator(end()));}
 	reverse_iterator			rend() {return (reverse_iterator(begin()));}
@@ -123,8 +136,22 @@ public:
 	{
 		return iterator(__erase_node(pos.base()));
 	}
-
-
+	iterator erase( iterator first, iterator last )
+	{
+		iterator	tem = last;
+		--last;
+		while (first != last)
+			erase(first);
+		return (erase(tem));
+	}
+	size_type erase( const Key& key )
+	{
+		iterator	tem = find(key);
+		if (tem == end())
+			return (false);
+		erase(tem);
+		return(true);
+	}
 
 
 
@@ -183,6 +210,26 @@ public:
 		std::cout<<"-----------------enserd "<<to_return.first->val.first<<std::endl;
 		return (ft::pair<iterator, bool>(iterator(to_return.first), 1));
 	}
+	iterator insert (iterator position, const value_type& val)
+	{
+		(void)position;
+		return (insert(val).first);
+	}
+	template <class InputIterator>
+	void insert (InputIterator first, InputIterator last)
+	{
+		while (first != last)
+		{
+			insert(*first);
+			first++;
+		}
+	}
+
+	void swap( map& other )
+	{
+		_size = _size ^ other._size, other._size = _size ^ other._size, _size = _size ^ other._size;
+		_root = _root ^ other._root, other._root = _root ^ other._root, _root = _root ^ other._root;
+	}
 
 	void	p(t_node *node)
 	{
@@ -210,7 +257,10 @@ public:
 	// key_compare key_comp() const;
 	//! std::map::value_compare value_comp() const; 
 
-
+	mapped_type& operator[] (const key_type& k)
+	{
+		return (*((this->insert(make_pair(k,mapped_type()))).first));
+	}
 
 //! CAPACITY
 	bool		empty() {return !_size;}
@@ -219,24 +269,152 @@ public:
 
 
 //! Lookup
-	// size_type count( const Key& key ) const;
-	// iterator find( const Key& key );
-	// const_iterator find( const Key& key ) const;
-	// std::pair<iterator,iterator> equal_range( const Key& key );
-	// std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const;
-	// iterator lower_bound( const Key& key );
-	// const_iterator lower_bound( const Key& key ) const;
-	// iterator upper_bound( const Key& key );
-	// const_iterator upper_bound( const Key& key ) const;
+	size_type count( const Key& key ) const
+	{
+		if (find(key) != end())
+			return (1);
+		return(0);
+	}
+	iterator find( const Key& key )
+	{
+		t_node	*tem = _root;
+		
+		while (tem)
+		{
+			if (tem->val.first == key)
+				return (iterator(tem, 1));
+			else if (!_com(tem->val.first, key))
+				tem = tem->left;
+			else
+				tem = tem->right;
+		}
+		return (end());
+	}
+	const_iterator find( const Key& key ) const
+	{
+		t_node	*tem = _root;
+		
+		while (tem)
+		{
+			if (tem->val.first == key)
+				return (const_iterator(tem, 1));
+			else if (!_com(tem->val.first, key))
+				tem = tem->left;
+			else
+				tem = tem->right;
+		}
+		return (end());
+	}
+	std::pair<iterator,iterator> equal_range( const Key& key )
+	{
+		return std::pair<iterator,iterator>(lower_bound(key), upper_bound(key));
+	}
+	std::pair<const_iterator,const_iterator> equal_range( const Key& key ) const
+	{
+		return std::pair<iterator,iterator>(lower_bound(key), upper_bound(key));
+	}
+	iterator lower_bound( const Key& key )
+	{
+		t_node	*tem = _root;
+		t_node	*tem1 = nullptr;
+		while (tem)
+		{
+			if (tem->val.first == key)
+				return (iterator(tem, 1));
+			else if (!_com(tem->val.first, key))
+			{
+				tem = tem->left;
+				tem1 = tem;
+			}
+			else
+				tem = tem->right;
+		}
+		return(iterator(tem1, 1));
+	}
+	const_iterator lower_bound( const Key& key ) const
+	{
+		t_node	*tem = _root;
+		t_node	*tem1 = nullptr;
+		while (tem)
+		{
+			if (tem->val.first == key)
+				return (const_iterator(tem, 1));
+			else if (!_com(tem->val.first, key))
+			{
+				tem = tem->left;
+				tem1 = tem;
+			}
+			else
+				tem = tem->right;
+		}
+		return(const_iterator(tem1, 1));
+	}
+	iterator upper_bound( const Key& key )
+	{
+		t_node	*tem = _root;
+		t_node	*tem1 = nullptr;
+		while (tem)
+		{
+			if (tem->val.first == key)
+				return (++(iterator(tem, 1)));
+			else if (!_com(tem->val.first, key))
+			{
+				tem = tem->left;
+				tem1 = tem;
+			}
+			else
+				tem = tem->right;
+		}
+		return(iterator(tem1, 1));
+	}
+	const_iterator upper_bound( const Key& key ) const
+	{
+		t_node	*tem = _root;
+		t_node	*tem1 = nullptr;
+		while (tem)
+		{
+			if (tem->val.first == key)
+				return (++(const_iterator(tem, 1)));
+			else if (!_com(tem->val.first, key))
+			{
+				tem = tem->left;
+				tem1 = tem;
+			}
+			else
+				tem = tem->right;
+		}
+		return(const_iterator(tem1, 1));
+	}
 
 
 //! NON member functions
-// friend bool operator== ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
-// friend bool operator!= ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
-// friend bool operator<  ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
-// friend bool operator<= ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
-// friend bool operator>  ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
-// friend bool operator>= ( const std::map<Key,T,Compare,Alloc>& lhs, const std::map<Key,T,Compare,Alloc>& rhs );
+friend bool operator== ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+{
+	if (lhs.size() != rhs.size())
+		return(false);
+	return (equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	
+}
+friend bool operator!= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+{
+	return (!(lhs == rhs));
+}
+friend bool operator<  ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+{
+	return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+}
+friend bool operator<= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+{
+	return (!(rhs < lhs));
+}
+friend bool operator>  ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+{
+	return (!(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())));
+}
+friend bool operator>= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
+{
+	return (!(lhs > rhs));
+}
 
 
 //! ///////////////////////////////////////////////////////////
@@ -249,6 +427,14 @@ private:
 	size_t			_size;
 	Compare			_com;
 	_node_allocator	_allocat;
+
+
+	t_node	*__get_rightest(t_node *node) const
+	{
+		while (node && node->right)
+			node = node->right;
+		return (node);
+	}
 
 	t_node	*__allocate_costruct_node(const value_type& v, t_node *par)
 	{
@@ -425,6 +611,8 @@ private:
 	{
 		t_rep_info	rep;
 		t_rep_info	rep_x;
+		if (!node)
+			return (node);
 		if (node->left && node->right)
 		{
 			std::cout<<"node with two children"<<std::endl;
@@ -779,5 +967,12 @@ private:
 	}
 
 };
+template <class Key, class T, class Compare, class Alloc>
+void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y)
+{
+	x.swap(y);
+}
+
+
 }
 #endif

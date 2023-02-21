@@ -28,9 +28,9 @@ struct pair
 {
 	typedef	T1  first_type;
 	typedef	T2  second_type;
-	T1		first;
+	const T1		first;
 	T2		second;
-	pair();
+	pair(){}
 	template<class U, class V> pair (const pair<U,V>& pr): first(pr.first), second(pr.second) {}
 	pair (const first_type& a, const second_type& b):first(a), second(b)  {}
 	pair& operator=( const pair& other )

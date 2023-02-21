@@ -43,32 +43,72 @@ int maizn()
 // // while(1){
 //       srand(time(0));
 //    // {
-   ft::map<int, int> mp;
-   ft::map<int, int> mpp;
+   std::map<int, int> mp;
 //    // std::cout<<"=========================================================\n=========================================================\n";
-   for (size_t i = 0; i < 5; i++)
+   for (size_t i = 0; i < 10 ; i++)
    {
       int k = rand()%30;
       // g[i] = k;
       std::cout<<"K: "<<k<<std::endl;
-      mp.insert(ft::pair<int, int>(k,i));
+      mp.insert(std::pair<int, int>(k,i));
    }
-   // ft::map<int, int>::iterator a = mp.begin();
+   // std::map<int, int>::iterator a = mp.begin();
    // (*a).first = 2;
    // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
    // ++a;
-   for (ft::map<int, int>::iterator i = mp.end(); i != mp.begin();)
+   for (std::map<int, int>::iterator i = mp.end(); i != mp.begin();)
    {
       --i;
-      std::cout<<"--- "<<(*i).first<<" ..'\n"<<std::endl;
+      // i->second = 7;
+      std::cout<<"--- "<<i->second<<" ..'\n"<<std::endl;
    }
-   mpp = mp;
-   mp.get_allocator();
+   // exit(0);
+   // mpp = mp;÷
+   std::map<int, int> mpp;
+   // // mpp.clra
+   mpp.insert(mp.begin(), mp.end());
+   for (std::map<int, int>::iterator i = mp.begin(); i != mp.end(); i++)
+   {
+      // std::cout<<"inside loop\n";
+      // if (i.base())
+      std::cout<<".. "<<(*i).first<<" ..'\n"<<std::endl;
+      /* code */
+   }
+   std::cout<<"............."<<std::endl;
+   // mpp.insert(std::make_pair(203, 23));
+   for (std::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
+   {
+      std::cout<<".. "<<(*i).first<<" ..'\n"<<std::endl;
+      /* code */
+   }
+   mpp.erase(23);
+   mpp[23] = 23;
+   // mp.get_allocator();
+   if (mpp == mp)
+      std::cout<<"yes they are equal     mp.size = "<<mp.size()<<" and mpp.size = "<<mpp.size()<<"\n";
+   if (mpp != mp)
+      std::cout<<"yes they are NOT equal     mp.size = "<<mp.size()<<" and mpp.size = "<<mpp.size()<<"\n";
+   if (mp > mpp)
+      std::cout<<"mp greater thtn mpp\n";
+   if (mp < mpp)
+      std::cout<<"mp is smaler than mpp\n";
+   mp.erase(mp.begin(), mp.end());
+   mp.swap(mpp);
+   for (std::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
+   {
+      std::cout<<".. "<<(*i).first<<" ..'\n"<<std::endl;
+      /* code */
+   }
+   // std::cout<<"............."<<std::endl;
+   // for (ft::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
+   // {
+   //    std::cout<<".. "<<(*i).first<<" ..'\n"<<std::endl;
+   //    /* code */
+   // }
+   
    // ++a;
-   // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
    // ++a;
    // mp.erase(a);
-   // // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
    // a = mp.begin();
    // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
    // ++a;

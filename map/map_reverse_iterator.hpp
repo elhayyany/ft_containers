@@ -34,10 +34,8 @@ class map_reverse_iterator
 
 
 
-		map_reverse_iterator() {}
-		~map_reverse_iterator() {}
-	
-
+	map_reverse_iterator() {}
+	~map_reverse_iterator() {}
 	map_reverse_iterator(_NodePtr node): it(node) {}
 	map_reverse_iterator(const map_reverse_iterator& itt):it(itt.it) {}
 	map_reverse_iterator&	operator=(const map_reverse_iterator& iit) 
@@ -76,8 +74,8 @@ class map_reverse_iterator
 	bool	operator==(map_reverse_iterator& itt) {return (it == itt.it);}
 	bool	operator!=(map_reverse_iterator& itt) {return (it != itt.it);}
 
-	const ft::pair<key, T>	operator*()  { return (*it); }
-	const ft::pair<key, T>	operator->() { return ((*it)); }
+	ft::pair<key, T>	operator*()  { return (*it); }
+	ft::pair<key, T>	operator->() { return ((*it)); }
 
 };
 }

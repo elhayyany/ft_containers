@@ -35,9 +35,9 @@ public:
 	typedef typename	allocator_type::size_type					size_type;
 	typedef typename	allocator_type::difference_type				difference_type;
 	typedef				vector_iterator<pointer>					iterator;
-	typedef				vector_iterator<const_pointer>				const_iterator;	
-	typedef				vector_reverse_iterator<pointer>			reverse_iterator;	
-	typedef				vector_reverse_iterator<const_pointer>		const_reverse_iterator;	
+	typedef				vector_iterator<const_pointer>				const_iterator;
+	typedef				vector_reverse_iterator<pointer>			reverse_iterator;
+	typedef				vector_reverse_iterator<const_pointer>		const_reverse_iterator;
 
 private:
 size_type		_size;

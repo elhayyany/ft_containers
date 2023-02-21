@@ -65,41 +65,47 @@ public:
 
 
 public:
-	typedef     				Key														key_type;
-	typedef     				T														mapped_type;
-	typedef						ft::pair<const	Key, T>									value_type;
-	typedef						size_t													size_type;
-	typedef	typename			std::ptrdiff_t											difference_type;
-	typedef						Compare													key_compare;
-	typedef						Alloc													allocator_type;
-	typedef	typename			Alloc::reference										reference;
-	typedef	typename			Alloc::const_reference									const_reference;
-	typedef typename			Alloc::pointer											pointer;
-	typedef	typename			Alloc::const_pointer									const_pointer;
-	typedef						map_iterator<Key, T, t_node *>							iterator;
-	typedef						map_iterator<Key, T, const t_node*>						const_iterator;
-	typedef						map_reverse_iterator<iterator, t_node *, Key, T>		reverse_iterator;
-	typedef						map_reverse_iterator<const_iterator, t_node *, Key, T>	const_reverse_iterator;
+	typedef     				Key																	key_type;
+	typedef     				T																	mapped_type;
+	typedef						ft::pair<const	Key, T>												value_type;
+	typedef						size_t																size_type;
+	typedef	typename			std::ptrdiff_t														difference_type;
+	typedef						Compare																key_compare;
+	typedef						Alloc																allocator_type;
+	typedef	typename			Alloc::reference													reference;
+	typedef	typename			Alloc::const_reference												const_reference;
+	typedef typename			Alloc::pointer														pointer;
+	typedef	typename			Alloc::const_pointer												const_pointer;
+	typedef						map_iterator<Key, T, t_node *, Compare>								iterator;
+	typedef						map_iterator<Key, T, const t_node*, Compare>						const_iterator;
+	typedef						map_reverse_iterator<iterator, t_node *, Key, T>			reverse_iterator;
+	typedef						map_reverse_iterator<const_iterator, t_node *, Key, T>		const_reverse_iterator;
 
 //! //////////////////////////////////////
 	
-	void	clear()	{clear_it(_root);}
+	void	clear()	
+	{
+		clear_it(_root);
+		_size = 0;
+	}
 //! //////////////////// 
 //* CONSTRUCTERS:
-	map(): _root(nullptr) {};
-	explicit map( const Compare& comp, const Alloc& alloc = Alloc()): Alloc(alloc), _com(comp){}
+	map(): _root(nullptr), _size(0) {};
+	explicit map( const Compare& comp, const Alloc& alloc = Alloc()): Alloc(alloc), _com(comp), _size(0) {}
 	template< class InputIt >
 	map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _allocat(alloc), _com(comp)
 	{
 		insert(first, last);
 	}
-	map( const map& other )
+	map( const map& other ) : _root(nullptr), _size(0)
 	{
 		insert(other.begin(), other.end());
 	}
 	~map() { clear(); };
 	map& operator=( const map& other )
 	{
+		_root = nullptr;
+		_size = 0;
 		insert(other.begin(), other.end());
 		return (*this);
 	}
@@ -114,8 +120,10 @@ public:
 	const_iterator				begin() const {return (const_iterator(_root));}
 	iterator					end() 
 	{
-		iterator	ij = iterator(__get_rightest(_root));
+		iterator	ij = iterator(__get_rightest(_root), 0);
+		// std::cout<<"end ÷befor ++: "<<ij.base()<<"   "<<(*ij).first<<std::endl;
 		++ij;
+		// std::cout<<"end after +÷+: "<<ij.base()<<"   "<<(*ij).first<<std::endl;
 		return (ij);
 	}
 	const_iterator				end() const 
@@ -138,10 +146,13 @@ public:
 	}
 	iterator erase( iterator first, iterator last )
 	{
-		iterator	tem = last;
 		--last;
+		iterator	tem = last;
 		while (first != last)
+		{
 			erase(first);
+			first++;
+		}
 		return (erase(tem));
 	}
 	size_type erase( const Key& key )
@@ -165,7 +176,9 @@ public:
 		std::cout<<"root is "<<_root->val.first<<std::endl;
 		if (!to_return.second){
 			return (ft::pair<iterator, bool>(iterator(to_return.first), 0));}
+		std::cout<<_size<<"             s  s        \n";
 		_size++;
+		std::cout<<_size<<"             s  s        \n";
 		t_node	*node = to_return.first;
 		// 	std::cout<<"........\n"<<node->color  << " ... " << node->parent->color<<"    "<<node->parent->val.first <<std::endl;
 		while(node->color == _RED && node->parent->color == _RED)
@@ -228,7 +241,10 @@ public:
 	void swap( map& other )
 	{
 		_size = _size ^ other._size, other._size = _size ^ other._size, _size = _size ^ other._size;
-		_root = _root ^ other._root, other._root = _root ^ other._root, _root = _root ^ other._root;
+		t_node * tem = _root;
+		_root = other._root;
+		other._root = tem;
+		// _root = _root ^ other._root, other._root = _root ^ other._root, _root = _root ^ other._root;
 	}
 
 	void	p(t_node *node)
@@ -257,9 +273,13 @@ public:
 	// key_compare key_comp() const;
 	//! std::map::value_compare value_comp() const; 
 
-	mapped_type& operator[] (const key_type& k)
+	T& operator[]( const Key& k )
 	{
-		return (*((this->insert(make_pair(k,mapped_type()))).first));
+
+		// return (*((this->insert(make_pair(k,mapped_type()))).first));// (*((insert(make_pair(k,mapped_type()))).first).second);
+		iterator	y = insert(make_pair(k,mapped_type())).first;
+		t_node	*base = y.base();
+		return (base->val.second);
 	}
 
 //! CAPACITY
@@ -390,10 +410,9 @@ public:
 //! NON member functions
 friend bool operator== ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
-	if (lhs.size() != rhs.size())
+	if (lhs._size != rhs._size)
 		return(false);
-	return (equal(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
-	
+	return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
 }
 friend bool operator!= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
@@ -401,7 +420,7 @@ friend bool operator!= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<
 }
 friend bool operator<  ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
-	return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+	return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 }
 friend bool operator<= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
@@ -409,7 +428,7 @@ friend bool operator<= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<
 }
 friend bool operator>  ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
-	return (!(lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())));
+	return (!(ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())));
 }
 friend bool operator>= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<Key,T,Compare,Alloc>& rhs )
 {
@@ -417,7 +436,19 @@ friend bool operator>= ( const ft::map<Key,T,Compare,Alloc>& lhs, const ft::map<
 }
 
 
-//! ///////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//! ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 private:
 
 
@@ -433,6 +464,7 @@ private:
 	{
 		while (node && node->right)
 			node = node->right;
+		// std::cout<<"the rig≈htest is: "<<node->val.first<<std::endl;
 		return (node);
 	}
 
@@ -658,6 +690,7 @@ private:
 				__next_deletion_step(node, rep, rep_x);
 		}
 		__destroy_deallocate_node(node);
+		_size--;
 		return (rep.self);
 	}
 

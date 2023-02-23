@@ -17,7 +17,6 @@
 #include <memory>
 #include <exception>
 #include "map_iterator.hpp"
-#include "map_reverse_iterator.hpp"
 
 #define  _INSERTION	1
 #define  _DELETION	0
@@ -36,8 +35,8 @@ class t_node
 {
 public:
 	friend class map;
-	t_node(const ft::pair<const	Key, T>& v, t_node *par):val(v), left(nullptr), right(nullptr), parent(par), color(_RED) {}
-	ft::pair<const	Key, T>	val;
+	t_node(t_node *par):left(nullptr), right(nullptr), parent(par), color(_RED) {}
+	ft::pair<const	Key, T>	*val;
 	t_node   	*left;
 	t_node		*right;
 	t_node		*parent;
@@ -93,7 +92,7 @@ public:
 	map(): _root(nullptr), _size(0) {};
 	explicit map( const Compare& comp, const Alloc& alloc = Alloc()): Alloc(alloc), _com(comp), _size(0) {}
 	template< class InputIt >
-	map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _allocat(alloc), _com(comp)
+	map( InputIt first, InputIt last, const Compare& comp = Compare(), const Alloc& alloc = Alloc() ): _com(comp),  _allocat(alloc)
 	{
 		insert(first, last);
 	}
@@ -173,19 +172,19 @@ public:
 	{
 		// std::cout<<"i: "<<val.first<<"\n";
 		ft::pair<t_node *, bool> to_return = __add_node_to_BST_returnIT(val);
-		std::cout<<"root is "<<_root->val.first<<std::endl;
+		// std::cout<<"root is "<<_root->val.first<<std::endl;
 		if (!to_return.second){
 			return (ft::pair<iterator, bool>(iterator(to_return.first), 0));}
-		std::cout<<_size<<"             s  s        \n";
+		// std::cout<<_size<<"             s  s        \n";
 		_size++;
-		std::cout<<_size<<"             s  s        \n";
+		// std::cout<<_size<<"             s  s        \n";
 		t_node	*node = to_return.first;
 		// 	std::cout<<"........\n"<<node->color  << " ... " << node->parent->color<<"    "<<node->parent->val.first <<std::endl;
 		while(node->color == _RED && node->parent->color == _RED)
 		{
 			if (__brother_color(node->parent) == _RED)
 			{
-					std::cout<<"hrer 0     "<<node->parent->val.first<<"\n";
+					// std::cout<<"hrer 0     "<<node->parent->val.first<<"\n";
 				t_node *tem = node->parent;
 				tem->parent->color = _RED;
 				tem->color = _BLACK;
@@ -200,27 +199,27 @@ public:
 				bool	node_side = __get_node_side(node);
 				if (node_side == __get_node_side(node->parent) && node_side == _LEFT)
 				{
-					std::cout<<"hrer 1\n";
+					// std::cout<<"hrer 1\n";
 					node = __right_rotation(node->parent);
 				}
 				else if (node_side == __get_node_side(node->parent) && node_side == _RIGHT)
 				{
-					std::cout<<"hrer 2\n";
+					// std::cout<<"hrer 2\n";
 					node = __left_rotation(node->parent);
 				}
 				else if (node_side == _RIGHT)
 				{
-					std::cout<<"hrer 3\n";
+					// std::cout<<"hrer 3\n";
 					node = __angle_to_line_left_rotation(node->parent, node);
 				}
 				else
 				{
-					std::cout<<"hrer 4\n";
+					// std::cout<<"hrer 4\n";
 					node = __angle_to_line_right_rotation(node->parent, node);
 				}
 			}
 		}
-		std::cout<<"-----------------enserd "<<to_return.first->val.first<<std::endl;
+		// std::cout<<"-----------------enserd "<<to_return.first->val.first<<std::endl;
 		return (ft::pair<iterator, bool>(iterator(to_return.first), 1));
 	}
 	iterator insert (iterator position, const value_type& val)
@@ -252,7 +251,7 @@ public:
 
 		if ((!node->left && !node->right))
 		{
-		std::cout<<": "<<node->val.first<<" "<<std::endl;
+		// std::cout<<": "<<node->val.first<<" "<<std::endl;
 		return;
 		}
 		if (node->left)
@@ -280,6 +279,14 @@ public:
 		iterator	y = insert(make_pair(k,mapped_type())).first;
 		t_node	*base = y.base();
 		return (base->val.second);
+	}
+	T& at( const Key& key )
+	{
+		return (find(key)->second);
+	}
+	const T& at( const Key& key ) const
+	{
+		return (find(key)->second);
 	}
 
 //! CAPACITY
@@ -458,7 +465,7 @@ private:
 	size_t			_size;
 	Compare			_com;
 	_node_allocator	_allocat;
-
+	Alloc			alloc;
 
 	t_node	*__get_rightest(t_node *node) const
 	{
@@ -471,7 +478,9 @@ private:
 	t_node	*__allocate_costruct_node(const value_type& v, t_node *par)
 	{
 		t_node	*saver = _allocat.allocate(sizeof(t_node));
-		_allocat.construct(saver, t_node(v,par));
+		_allocat.construct(saver, t_node(par));
+		saver->val = alloc.allocate(sizeof(value_type));
+		alloc.construct(val, v);
 		return	(saver);
 	}
 
@@ -647,7 +656,7 @@ private:
 			return (node);
 		if (node->left && node->right)
 		{
-			std::cout<<"node with two children"<<std::endl;
+			// std::cout<<"node with two children"<<std::endl;
 			t_node	*secsessor = __get_secsessor(node);
 			rep.parent = secsessor->parent;
 			rep.self = secsessor;
@@ -659,7 +668,7 @@ private:
 		}
 		else if (node->left)
 		{
-			std::cout<<"node with LEFT child and its color is: "<<node->color<<"and its value is: "<<node->val.first<<std::endl;
+			// std::cout<<"node with LEFT child and its color is: "<<node->color<<"and its value is: "<<node->val.first<<std::endl;
 			rep.parent = node;
 			rep.self = node->left;
 			rep._side = __get_node_side(node);
@@ -670,8 +679,8 @@ private:
 		}
 		else if (node->right)
 		{
-			std::cout<<"node with RIGHT child and its color is: "<<node->color<<"and its value is: "<<node->val.first<<std::endl;
-			std::cout<<__get_node_side(node)<<std::endl;
+			// std::cout<<"node with RIGHT child and its color is: "<<node->color<<"and its value is: "<<node->val.first<<std::endl;
+			// std::cout<<__get_node_side(node)<<std::endl;
 			rep.parent = node;
 			rep.self = node->right;
 			rep._side = __get_node_side(node);
@@ -682,7 +691,7 @@ private:
 		}
 		else
 		{
-			std::cout<<"node with NO children and its color is: "<<node->color<<"and its value is: "<<node->val.first<<std::endl;
+			// std::cout<<"node with NO children and its color is: "<<node->color<<"and its value is: "<<node->val.first<<std::endl;
 			rep.parent = node->parent;
 			rep.self = nullptr;
 			rep_x = __delete_node_with_no_children(node, rep_x);
@@ -705,8 +714,8 @@ private:
 	t_rep_info	__delete_node_with_two_children(t_node *node, t_rep_info remp, t_rep_info rep_x)
 	{
 		// exit(0);
-		std::cout<<"node: "<<node->val.first  <<"  "<<node->parent<<"\n";
-		std::cout<<"parent:  "<<remp.self->val.first<<std::endl;
+		// std::cout<<"node: "<<node->val.first  <<"  "<<node->parent<<"\n";
+		// std::cout<<"parent:  "<<remp.self->val.first<<std::endl;
 		// exit(0);
 		if (node->parent)
 		{
@@ -717,7 +726,7 @@ private:
 		}
 		if (__get_node_side(remp.self) == _LEFT)
 		{
-			std::cout<<"Lefttt\n";
+			// std::cout<<"Lefttt\n";
 			remp.self->parent->left = rep_x.self;
 			rep_x._side = _LEFT;
 		}
@@ -797,52 +806,53 @@ private:
 		// 	exit(0);
 		if (node->color == _RED && rep.self && rep.self->color == _BLACK)
 		{
-			std::cout<<"step 1\n\n";
+			// std::cout<<"step 1\n\n";
 			rep.self->color = _RED;
 			__fixUP_step(rep_x);
 		}
 		else if (node->color == _BLACK)
 		{
 			if (rep.self && rep.self->color == _RED)
-			{std::cout<<"step 2\n\n";
+			{
+				// std::cout<<"step 2\n\n";
 				rep.self->color = _BLACK;
 			}else if (rep_x.self != _root)
-			{	std::cout<<"step 3\n\n";__fixUP_step(rep_x);}
+				__fixUP_step(rep_x);
 		}
 		// if (rep.self)
 		// std::cout<<rep.self->parent->left->val.first<<"out\n\n";
-		std::cout<<"out\n\n";
+		// std::cout<<"out\n\n";
 	}
 	// bool pk(){std::cout<<"here\n"; return (1);}
 	void	__fixUP_step(t_rep_info x)
 	{
 		t_rep_info w = __get_rep_sibling(x);
-		std::cout<<"w v: "<<w.self->val.first<<std::endl;
-		std::cout<<"w c: "<<w.self->color<<std::endl;
+		// std::cout<<"w v: "<<w.self->val.first<<std::endl;
+		// std::cout<<"w c: "<<w.self->color<<std::endl;
 		while (x.self != _root || (x.self && x.self->color == _RED))
 		{
 					// std::cout<<"llllll:::   "<<w.self->right->color<<std::endl;;
 			if (x.self && x.self->color == _RED) // Node x is red
 			{
-				std::cout<<"case 0\n";
+				// std::cout<<"case 0\n";
 				x.self->color = _BLACK;
 				return;
 			}
 			else if (w.self && w.self->color == _RED) // Node x is black and its sibling w is red
 			{
-				std::cout<<"case 1\n";
+				// std::cout<<"case 1\n";
 				w.self->color = _BLACK;
 				// if (!x.self)
 				// 	exit(0);
 				x.parent->color = _RED;
 				if (x._side == _LEFT)
 				{
-					std::cout<<"case 1 left\n";
+					// std::cout<<"case 1 left\n";
 					__deletion_left_rotation(x.parent);
 				}
 				else
 				{
-					std::cout<<"case 1 right\n";
+					// std::cout<<"case 1 right\n";
 					__deletion_right_rotation(x.parent);
 				}
 				if (x._side == _LEFT)
@@ -865,7 +875,7 @@ private:
 			// }
 			else if ((!w.self->left || w.self->left->color == _BLACK) && (!w.self->right || w.self->right->color == _BLACK)) //Node x is black, its sibling w is black, and both of w's children are black
 			{
-				std::cout<<"case 2\n";
+				// std::cout<<"case 2\n";
 				w.self->color = _RED;
 				x.self = x.parent;
 				x._side = __get_node_side(x.parent);
@@ -881,7 +891,7 @@ private:
 			else if (x._side == _LEFT && w.self && w.self->left && w.self->left->color == _RED\
 				&& ( !w.self->right || w.self->right->color == _BLACK)) //If x is the left child, w's left child is red and w's right child is black
 			{
-				std::cout<<"case 3.0\n";
+				// std::cout<<"case 3.0\n";
 				w.self->left->color = _BLACK;
 				w.self->color = _RED;
 				__deletion_right_rotation(w.self);
@@ -892,7 +902,7 @@ private:
 			else if (x._side == _RIGHT && w.self && w.self->right && w.self->right->color == _RED\
 				&& ( !w.self->left || w.self->left->color == _BLACK)) // If x is the right child, w's right child is red and w's left child is black
 			{
-				std::cout<<"case 3.1\n";
+				// std::cout<<"case 3.1\n";
 				w.self->right->color = _BLACK;
 				w.self->color = _RED;
 				__deletion_left_rotation(w.self);
@@ -903,7 +913,7 @@ private:
 			//  Node x is black, its sibling w is black, and
 			else if (x._side == _LEFT && w.self && w.self->right && w.self->right->color == _RED) // • If x is the left child, w's right child is red
 			{
-				std::cout<<"case 4.0\n";
+				// std::cout<<"case 4.0\n";
 				w.self->color = x.parent->color;
 				x.parent->color = _BLACK;
 				w.self->right->color = _BLACK;
@@ -916,7 +926,7 @@ private:
 			}
 			else if (x._side == _RIGHT && w.self && w.self->left && w.self->left->color == _RED) //• If x is the right child, w's left child is red
 			{
-				std::cout<<"case 4.1\n";
+				// std::cout<<"case 4.1\n";
 				w.self->color = x.parent->color;
 				x.parent->color = _BLACK;
 				w.self->left->color = _BLACK;
@@ -927,13 +937,9 @@ private:
 				// x._side = x._side;
 				return ;
 			}
-			else
-			{
-				std::cout<<"qqqqqqq\n";
-			}
 		}
 	}
-	bool oo(const std::string &h){std::cout<<h<<std::endl;return (1);}
+	// bool oo(const std::string &h){std::cout<<h<<std::endl;return (1);}
 	t_rep_info	__get_rep_sibling(t_rep_info remp_x)
 	{
 		t_rep_info tem;
@@ -951,12 +957,12 @@ private:
 	}
 	void	clear_it(t_node *node)
 	{
-		static int i    = 0;
+		// static int i    = 0;
 		if (!node)
 			return ;
 		if (node->left)
 			clear_it(node->left);
-		std::cout<<i++<<std::endl;
+		// std::cout<<i++<<std::endl;
 		if (node->right)
 			clear_it(node->right);
 		if (__get_node_side(node) == _LEFT)
@@ -980,7 +986,7 @@ private:
 		node->parent = rh_child;
 		if (_root == node)
 			_root = rh_child;	
-		std::cout<<"out of deletion LEFT rotate\n";
+		// std::cout<<"out of deletion LEFT rotate\n";
 	}
 	void	__deletion_right_rotation(t_node	*node)
 	{

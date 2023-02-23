@@ -43,40 +43,40 @@ int maizn()
 // // while(1){
 //       srand(time(0));
 //    // {
-   std::map<int, int> mp;
+   ft::map<int, int> mp;
 //    // std::cout<<"=========================================================\n=========================================================\n";
    for (size_t i = 0; i < 10 ; i++)
    {
       int k = rand()%30;
       // g[i] = k;
       std::cout<<"K: "<<k<<std::endl;
-      mp.insert(std::pair<int, int>(k,i));
+      mp.insert(ft::pair<int, int>(k,i));
    }
    // std::map<int, int>::iterator a = mp.begin();
    // (*a).first = 2;
    // std::cout<<".. "<<(*a).first<<" ..'\n"<<std::endl;
    // ++a;
-   for (std::map<int, int>::iterator i = mp.end(); i != mp.begin();)
+   for (ft::map<int, int>::iterator i = mp.end(); i != mp.begin();)
    {
       --i;
       // i->second = 7;
-      std::cout<<"--- "<<i->second<<" ..'\n"<<std::endl;
+      std::cout<<"--- [[[[]]]]"<<(*i).second<<" ..'\n"<<std::endl;
    }
    // exit(0);
    // mpp = mp;÷
-   std::map<int, int> mpp;
+   ft::map<int, int> mpp;
    // // mpp.clra
    mpp.insert(mp.begin(), mp.end());
-   for (std::map<int, int>::iterator i = mp.begin(); i != mp.end(); i++)
+   for (ft::map<int, int>::iterator i = mp.begin(); i != mp.end(); i++)
    {
       // std::cout<<"inside loop\n";
       // if (i.base())
-      std::cout<<".. "<<(*i).first<<" ..'\n"<<std::endl;
+      std::cout<<".. "<<mp.at((*i).first)<<" ..'\n"<<std::endl;
       /* code */
    }
    std::cout<<"............."<<std::endl;
    // mpp.insert(std::make_pair(203, 23));
-   for (std::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
+   for (ft::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
    {
       std::cout<<".. "<<(*i).first<<" ..'\n"<<std::endl;
       /* code */
@@ -92,13 +92,14 @@ int maizn()
       std::cout<<"mp greater thtn mpp\n";
    if (mp < mpp)
       std::cout<<"mp is smaler than mpp\n";
-   mp.erase(mp.begin(), mp.end());
+   //mp.erase(mp.begin(), mp.end());
    mp.swap(mpp);
-   for (std::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
+   for (ft::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
    {
       std::cout<<".. "<<(*i).first<<" ..'\n"<<std::endl;
       /* code */
    }
+   // std::cout<<mp.at(23)<<"sshjsjsjhshjshushus\n";
    // std::cout<<"............."<<std::endl;
    // for (ft::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
    // {
@@ -197,11 +198,28 @@ int maizn()
    // }
    // ft::map<int, int> a;
    // a.insert(ft::pair<int, int>(1,2));
+   // exit(0);
    return (0);
 }
- 
+#define  typedef ft::map<int, char>             map_i_c
+// #define  map_i_c::iterator   map_it
+
+
+// void  rest()
+// {
+//    ft::map<int, char> a;
+//    for (size_t i = 0; i < 50; i++)
+//       a.insert(ft::make_pair(i, i+50));
+//    map_i_c::iterator k = a.begin();
+// }
+
+
+
+
 int main()
 {
+   // rest();
    maizn();
+
    // system("leaks container");
 }

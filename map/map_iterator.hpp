@@ -13,9 +13,10 @@
 #ifndef MAP_ITERATOR_HPP
 #define MAP_ITERATOR_HPP
 
-#include <memory>
-#include <exception>
-#include "map.hpp"
+#include "map_reverse_iterator.hpp"
+// #include "m÷ap.hpp"
+#include "../utiles/pair.hpp"
+#include "../utiles/iterator_traits.hpp"
 namespace ft
 {
 
@@ -27,6 +28,35 @@ namespace ft
 
 
 
+// template< class T >
+// struct iterator_traits
+// {
+// 	typedef typename T::iterator_category			 	iterator_category;
+// 	typedef typename T::value_type						value_type;
+// 	typedef typename T::difference_type			 		difference_type;
+// 	typedef typename T::pointer							pointer;
+// 	typedef typename T::reference						reference;
+	
+// };
+// template< class T >
+// struct iterator_traits<T*>
+// {
+// 	typedef std::bidirectional_iterator_tag 			iterator_category;
+// 	typedef T                          					value_type;
+// 	typedef std::ptrdiff_t                  			difference_type;
+// 	typedef T*                         					pointer;
+// 	typedef T&                         					reference;
+// };
+// template< class T >
+// struct iterator_traits<const T*>
+// {
+// 	typedef std::bidirectional_iterator_tag 			iterator_category;
+// 	typedef T                          					value_type;
+// 	typedef std::ptrdiff_t                  			difference_type;
+// 	typedef const	T*                         			pointer;
+// 	typedef const	T&                         			reference;
+
+// };
 
 
 
@@ -37,10 +67,10 @@ class	map_iterator
 
 
 public:
-	typedef		typename iterator_traits<_NodePtr>::pointer				pointer;
-	typedef		typename iterator_traits<_NodePtr>::value_type			value_type;
-	typedef		typename iterator_traits<_NodePtr>::difference_type		difference_type;
-	typedef		typename iterator_traits<_NodePtr>::reference			reference;
+	typedef		typename ft::iterator_traits<_NodePtr>::pointer				pointer;
+	typedef		typename ft::iterator_traits<_NodePtr>::value_type			value_type;
+	typedef		typename ft::iterator_traits<_NodePtr>::difference_type		difference_type;
+	typedef		typename ft::iterator_traits<_NodePtr>::reference			reference;
 	typedef 	std::bidirectional_iterator_tag							iterator_category;
 
 
@@ -59,36 +89,16 @@ public:
 
 	map_iterator& operator++()
 	{
-
-		// if (comp(_root->val.first, _root->parent->val.first))
-		// {
-			// std::cout<<"not statment. the first one is _root:"<<_root->val.first<<"  the second one is parent:"<<_root->parent->val.first<<std::endl;
-		// }
-		// else
-		// {
-			// std::cout<<"yes statment. the first one is _root:"<<_root->val.first<<"  the second one is parent:"<<_root->parent->val.first<<std::endl;
-		// }
-		// exit(0);
-		// if (_root)
-		// std::cout<<"++ operator: "<<_root->val.first<<std::endl;
 		_root_tem = _root;
 		if (_root && _root->right)
 			_root = _get_left(_root->right);
 		else if (_root)
 		{
-			// std::cout<<"here   "<<_root->val.first<<std::endl;;
 			_NodePtr	tem = _root;
 			_root = _root->parent;
 			while (_root && comp(_root->val.first, tem->val.first))
-			{
-				// std::cout<<"wile: "<<_root->val.first<<std::endl;
 				_root = _root->parent;
-				
-			}
-			// std::cout<<";;;   "<<_root->val.first<<std::endl;}
 		}
-		// if (_root)
-		// std::cout<<"++ enf `operator: "<<_root->val.first<<std::endl;
 		return (*this);
 	}
 
@@ -129,8 +139,8 @@ public:
 	bool	operator==(const map_iterator& it) {return (_root == it._root);}
 	bool	operator!=(const map_iterator& it) {return (_root != it._root);}
 
-	ft::pair<const key, T>	operator*()  { return (_root->val); }
-	ft::pair<const key, T>*	operator->() { return (&(_root->val)); }
+	ft::pair<const key, T>&	operator*()  { return ((this->_root->val)); }
+	ft::pair<const key, T>*	operator->() { return (&(this->_root->val)); }
 
 private:
 	_NodePtr	_root;

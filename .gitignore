@@ -4,3 +4,4 @@
 container
 .vscode
 *.todo
+*.dSYM

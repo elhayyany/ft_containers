@@ -15,7 +15,7 @@
 
 #include <memory>
 #include <exception>
-#include "map.hpp"
+// #include "map.hpp"
 namespace ft
 {
 
@@ -74,8 +74,8 @@ class map_reverse_iterator
 	bool	operator==(map_reverse_iterator& itt) {return (it == itt.it);}
 	bool	operator!=(map_reverse_iterator& itt) {return (it != itt.it);}
 
-	ft::pair<key, T>	operator*()  { return (*it); }
-	ft::pair<key, T>	operator->() { return ((*it)); }
+	ft::pair<const key, T>	operator*()  { return (*it); }
+	ft::pair<const key, T>	operator->() { return ((*it)); }
 
 };
 }

@@ -14,7 +14,7 @@
 #define IS_INTEGRAL_HPP
 #include <iostream>
 #include <type_traits>
-#include "../vector/vector.hpp"
+// #include "../vector/vec÷tor.hpp"
 namespace ft{
 
   template<class T, T v>

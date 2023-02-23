@@ -14,6 +14,7 @@
 #ifndef PAIR_HPP
 #define PAIR_HPP
 
+#include "enable_if.hpp"
 
 #define	_BLACK	0
 #define	_RED	1
@@ -30,13 +31,14 @@ struct pair
 	typedef	T2  second_type;
 	const T1		first;
 	T2		second;
-	pair(){}
+	pair():first(T1()){}
 	template<class U, class V> pair (const pair<U,V>& pr): first(pr.first), second(pr.second) {}
-	pair (const first_type& a, const second_type& b):first(a), second(b)  {}
+	pair (const T1& a, const T2& b): first(a), second(b) {}
 	pair& operator=( const pair& other )
 	{
-		first = other.first;
+		// first = other.first;
 		second = other.second;
+		return (*this);
 	}
 
 	//!  non mumber functions

@@ -12,6 +12,8 @@
 
 #ifndef ENABLE_IF_HPP
 #define ENABLE_IF_HPP
+
+#include "is_integral.hpp"
 namespace ft
 {
 template<bool B, typename T> struct enable_if {};

@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 11:16:10 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/20 11:16:12 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/01 11:14:49 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 
 #include <memory>
 #include <exception>
+#include "../utiles/iterator_traits.hpp"
+#include "map_iterator.hpp"
 // #include "map.hpp"
 namespace ft
 {
 
-template<class It, class _NodePtr, class key, class T>
+template<class It>
 class map_reverse_iterator
 {
 	private:
@@ -35,12 +37,16 @@ class map_reverse_iterator
 
 
 	map_reverse_iterator() {}
+	map_reverse_iterator(const It& itte): it(itte) {}
 	~map_reverse_iterator() {}
-	map_reverse_iterator(_NodePtr node): it(node) {}
-	map_reverse_iterator(const map_reverse_iterator& itt):it(itt.it) {}
-	map_reverse_iterator&	operator=(const map_reverse_iterator& iit) 
+	map_reverse_iterator(pointer node): it(node) {}
+	template <class itter>
+	map_reverse_iterator(const map_reverse_iterator<itter>& itt):it(itt.base(), 1) {}
+	template <class itter>
+	map_reverse_iterator&	operator=(const map_reverse_iterator<itter>& iit) 
 	{
-		it = iit.it;
+		it = iit.base();
+		return (*this);
 	}
 
 
@@ -53,7 +59,7 @@ class map_reverse_iterator
 	map_reverse_iterator operator++(int)
 	{
 		map_reverse_iterator	tem = *this;
-		--(*this);
+		++(*this);
 		return (tem);
 	}
 
@@ -65,17 +71,19 @@ class map_reverse_iterator
 	map_reverse_iterator operator--(int)
 	{
 		map_reverse_iterator	tem = *this;
-		++(*this);
+		--(*this);
 		return (tem);
 	}
 
-	_NodePtr base(){return (it.base());}
+	pointer base() const {return (it.base());}
 
-	bool	operator==(map_reverse_iterator& itt) {return (it == itt.it);}
-	bool	operator!=(map_reverse_iterator& itt) {return (it != itt.it);}
+	template <class itter>
+	bool	operator==(const map_reverse_iterator<itter>& itt) {return (it.base() == itt.base());}
+	template <class itter>
+	bool	operator!=(const map_reverse_iterator<itter>& itt) {return !(*this == itt);}
 
-	ft::pair<const key, T>	operator*()  { return (*it); }
-	ft::pair<const key, T>	operator->() { return ((*it)); }
+	value_type&	operator*()  { return (*it); }
+	value_type*	operator->() { return ( it.operator->() ); }
 
 };
 }

@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 09:32:06 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/29 16:37:44 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/01 12:13:07 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ public:
 	it base() const  {return _ptr;}
 	vector_reverse_iterator()
 	{
-		_ptr = nullptr;
+		_ptr = NULL;
 	}
 	template <class A> vector_reverse_iterator(const vector_reverse_iterator<A>& other)
 	{

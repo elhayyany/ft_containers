@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/19 14:19:25 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:10:35 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,27 +89,27 @@ public:
 	//? Member functions !!!
 
 
-	explicit vector():_size(0), _capacity(0), _allocator(allocator_type()) {_arr = nullptr;};
-	explicit vector( size_type count, const value_type& val = value_type(), const Allocator& alloc = Allocator()): _allocator(alloc)
+	explicit vector(allocator_type allocator_deff = allocator_type()):_size(0), _capacity(0), _allocator(allocator_deff) {_arr = NULL;};
+	explicit vector( size_type count, const value_type& val = value_type(), const Allocator& alloc = Allocator()): _size(0), _capacity(0), _allocator(alloc)
 	{
 		if (count > _allocator.max_size())
 			throw std::length_error("vector");
 		if(count)
 			_arr = _allocator.allocate(count);
 		else
-			_arr = nullptr;
+			_arr = NULL;
 		for (size_t i = 0; i < count; i++)
 			_allocator.construct(_arr + i, val);
 		_size = count;
 		_capacity = count;
 	}
 
-	vector( const vector& other )
+	vector( const vector& other ): _size(0), _capacity(0), _allocator(other._allocator)
 	{
 		if (other._arr)
 			_arr = _allocator.allocate(other._size);
 		else
-			_arr = nullptr;
+			_arr = NULL;
 		construct(_arr, other._size, other._arr);
 		_size = other._size;
 		_capacity = other._size;
@@ -117,14 +117,9 @@ public:
 	template< class InputIt >
 		vector(InputIt  first, InputIt last,
 		const Allocator& alloc = Allocator(), typename ft::enable_if<!ft::is_integral< InputIt >::value, InputIt>::type* = 0)
-		: _allocator(alloc)
+		:_size(0), _capacity(0),_arr(NULL), _allocator(alloc)
 	{
-		difference_type	a = size_it(first, last);
-		_arr = _allocator.allocate(a);
-		for(difference_type o = 0; o != a; o++)
-			_allocator.construct(_arr + o, *(first + o));
-		_size = a;
-		_capacity = a;
+		assign(first, last);
 	}
 	~vector()
 	{
@@ -155,6 +150,8 @@ public:
 		destroy(_arr, _size);
 		if (_capacity < count)
 		{
+			if (_arr)
+				_allocator.deallocate(_arr, _capacity);
 			_arr = _allocator.allocate(count);
 			_capacity = count;
 		}
@@ -164,13 +161,26 @@ public:
 	template <class InputIterator>
 	void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral< InputIterator >::value, InputIterator>::type* = 0)
 	{
-		difference_type	a = size_it(first, last);
+
+		vector	tem;
+		while (first != last)
+		{
+			tem.push_back(*first);
+			first++;
+		}
 		clear();
-		if (a > (difference_type)_capacity)
-			reserve(a);
-		for (size_type	i = 0; first != last && ++i; first++)
-			_allocator.construct(_arr + i - 1 , *first);
-		_size = a;
+		if (tem.size() > _capacity)
+			reserve(tem.size());
+		construct(_arr, tem.size(), tem._arr);
+		_size = tem.size();
+
+		// difference_type	a = size_it(first, last);
+		// clear();
+		// if (a > (difference_type)_capacity)
+		// 	reserve(a);
+		// for (size_type	i = 0; first != last && ++i; first++)
+		// 	_allocator.construct(_arr + i - 1 , *first);
+		// _size = a;
 	}
 	allocator_type get_allocator() const {return (_allocator);};
 
@@ -226,7 +236,8 @@ public:
 			_arr = _allocator.allocate(n);
 			construct(_arr, _size, ptr);
 			destroy(ptr, _size);
-			_allocator.deallocate(ptr, _capacity);
+			if (ptr)
+				_allocator.deallocate(ptr, _capacity);
 			_capacity = n;
 		}
 	}
@@ -348,8 +359,10 @@ public:
 				_allocator.destroy(_arr + i);
 				_allocator.construct(_arr + i, *(last + j));
 			}
+			else if (i < _size)
+				_allocator.destroy(_arr + i);
 			else
-				_allocator.destroy(_arr + lst + j);
+				break;
 		}
 		_size -= tem;
 		return (iterator(_arr + index));
@@ -377,12 +390,7 @@ public:
 	}
 	template <class T, class Allocator> bool operator!=(const vector<T,Allocator>& x, const vector<T,Allocator>& y)
 	{
-		if (x.size() != y.size())
-			return (1);
-		for (size_t i = 0; i < x.size(); i++)
-			if (x[i] == y[i])
-				return (0);
-		return (1);
+		return (!(x == y));
 	}
 	template <class T, class Allocator> bool operator < (const vector<T,Allocator>& x, const vector<T,Allocator>& y)
 	{

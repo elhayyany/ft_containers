@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/12/21 10:19:37 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/02 11:30:55 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,17 @@
 #include <iostream>
 #include <algorithm>
 #include <deque>
-// #include "map/red_black_tree.hpp"
 
+// #include "map/red_black_tree.hpp"
+#define AA 1
+
+void  print(ft::map<int, int>::iterator a, ft::map<int, int>::iterator b)
+{
+   while (a != b){
+      std::cout<<a->first<<std::endl; a++;}
+   std::cout<<"jjj\n";
+   exit(0);
+}
 
 int maizn()
 {
@@ -43,7 +52,18 @@ int maizn()
 // // while(1){
 //       srand(time(0));
 //    // {
-   ft::map<int, int> mp;
+
+   
+
+
+   std::map<int, int> mp;
+   std::map<int, int> mq;
+
+   mp = mq;
+   std::cout<<((mp.begin()) == (mp.end())) <<std::endl;
+   #ifndef AA
+   #define
+   print(mp.begin(), mp.end());
 //    // std::cout<<"=========================================================\n=========================================================\n";
    for (size_t i = 0; i < 10 ; i++)
    {
@@ -96,9 +116,15 @@ int maizn()
    mp.swap(mpp);
    for (ft::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
    {
-      std::cout<<".. "<<(*i).first<<" ..'\n"<<std::endl;
+      std::cout<<"LL "<<(i)->first<<" ..'\n"<<std::endl;
       /* code */
    }
+   for (ft::map<int, int>::reverse_iterator i = mpp.rbegin(); i != mpp.rend(); i++)
+   {
+      /* code */
+      std::cout<<"RE "<<(i)->first<<" ..'\n"<<std::endl;
+   }
+   
    // std::cout<<mp.at(23)<<"sshjsjsjhshjshushus\n";
    // std::cout<<"............."<<std::endl;
    // for (ft::map<int, int>::iterator i = mpp.begin(); i != mpp.end(); i++)
@@ -199,6 +225,7 @@ int maizn()
    // ft::map<int, int> a;
    // a.insert(ft::pair<int, int>(1,2));
    // exit(0);
+   #endif
    return (0);
 }
 #define  typedef ft::map<int, char>             map_i_c
@@ -218,8 +245,19 @@ int maizn()
 
 int main()
 {
-   // rest();
-   maizn();
-
-   // system("leaks container");
+   int arr[150];
+   for (size_t i = 0; i < 150; i++)
+   {
+      arr[i] = i;
+   }
+   
+   ft::vector<int> a(arr, arr + 150);
+   a.erase(a.end(), a.end());
+   // a.erase(a.begin(), a.begin());
+   for (ft::vector<int>::iterator i = a.begin(); i != a.end(); i++)
+   {
+      std::cout<<*i<<"\t";
+   }
+   
+   
 }

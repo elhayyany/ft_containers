@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:01 by ael-hayy          #+#    #+#             */
-/*   Updated: 2022/11/12 16:50:12 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/02 15:50:22 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,11 @@ template <class T, class Container = ft::vector<T> >
 class stack
 {
 public:
-	typedef                 T                               value_type;
-	typedef                 Container                       container_type;
-	typedef typename        container_type::size_type       size_type;
+	typedef                 T                               	value_type;
+	typedef                 Container                       	container_type;
+	typedef typename        container_type::size_type       	size_type;
+	typedef	typename		container_type::reference			reference;
+	typedef	typename		container_type::const_reference		const_reference;
 
 private:
 

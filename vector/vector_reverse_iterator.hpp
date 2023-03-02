@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 09:32:06 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/01 12:13:07 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/02 15:42:26 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,37 +92,39 @@ public:
 		return (t);
 	}
 
-	template <class ii> friend bool operator== (const vector_reverse_iterator<ii>& lhs, const vector_reverse_iterator<ii>& rhs)
+	template <class ittt> bool operator== (const vector_reverse_iterator<ittt>& rhs)
 	{
-		return (lhs._ptr == rhs._ptr);
+		return (this->base() == rhs.base());
 	}
-	bool operator != (const vector_reverse_iterator& other)
+	template<class itt> bool operator != (const vector_reverse_iterator<itt>& other)
 	{
-		return (_ptr != other._ptr);
+		return (_ptr != other.base());
 	}
-	vector_reverse_iterator& operator - (const vector_reverse_iterator& other)
-	{
-		return (_ptr + other._ptr);
-	}
+	difference_type operator+ (const vector_reverse_iterator& other) const {
+        return (static_cast<difference_type>(_ptr + other._ptr));
+    }
+    difference_type operator- (const vector_reverse_iterator& other) const {
+        return (static_cast<difference_type>(_ptr - other._ptr));
+    }
 	reference	operator * ()
 	{
 		return (*_ptr);
 	}
-	bool operator < (const vector_reverse_iterator& other)
+	template<class itt> bool operator < (const vector_reverse_iterator<itt>& other)
 	{
-		return (_ptr < other._ptr);
+		return (_ptr < other.base());
 	}
-	bool operator <= (const vector_reverse_iterator& other)
+	template<class itt> bool operator <= (const vector_reverse_iterator<itt>& other)
 	{
-		return (_ptr <= other._ptr);
+		return (_ptr <= other.base());
 	}
-	bool operator > (const vector_reverse_iterator& other)
+	template<class itt> bool operator > (const vector_reverse_iterator<itt>& other)
 	{
-		return (_ptr > other._ptr);
+		return (_ptr > other.base());
 	}
-	bool operator >= (const vector_reverse_iterator& other)
+	template<class itt> bool operator >= (const vector_reverse_iterator<itt>& other)
 	{
-		return (_ptr >= other._ptr);
+		return (_ptr >= other.base());
 	}
 	void operator += (const difference_type a)
 	{

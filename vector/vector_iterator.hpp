@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 18:26:39 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/01 12:13:07 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/02 13:46:12 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ public:
 		return (t);
 	}
 
-	template <class ii> friend bool operator== (const vector_iterator<ii>& lhs, const vector_iterator<ii>& rhs)
+	template <class ii, class ittt> friend bool operator== (const vector_iterator<ii>& lhs, const vector_iterator<ittt>& rhs)
 	{
-		return (lhs._ptr == rhs._ptr);
+		return (lhs.base() == rhs.base());
 	}
-	bool operator != (const vector_iterator& other)
+	template <class itt> bool operator != (const vector_iterator<itt>& other)
 	{
-		return (_ptr != other._ptr);
+		return (_ptr != other.base());
 	}
 	difference_type operator - (const vector_iterator& other)
 	{
@@ -106,21 +106,21 @@ public:
 	{
 		return (*_ptr);
 	}
-	bool operator < (const vector_iterator& other)
+	template <class itt> bool operator < (const vector_iterator<itt>& other)
 	{
-		return (_ptr < other._ptr);
+		return (_ptr < other.base());
 	}
-	bool operator <= (const vector_iterator& other)
+	template <class itt> bool operator <= (const vector_iterator<itt>& other)
 	{
-		return (_ptr <= other._ptr);
+		return (_ptr <= other.base());
 	}
-	bool operator > (const vector_iterator& other)
+	template <class itt> bool operator > (const vector_iterator<itt>& other)
 	{
-		return (_ptr > other._ptr);
+		return (_ptr > other.base());
 	}
-	bool operator >= (const vector_iterator& other)
+	template <class itt> bool operator >= (const vector_iterator<itt>& other)
 	{
-		return (_ptr >= other._ptr);
+		return (_ptr >= other.base());
 	}
 	void operator += (const difference_type a)
 	{

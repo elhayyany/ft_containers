@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/02 11:10:35 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/02 15:39:40 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,7 @@ public:
 
 	bool empty() const {return (!_size);}
 	size_type size() const {return (_size);}
-	size_type max_size() const {return (_allocator.max_size());}
+	size_type max_size() const {return ((_allocator.max_size() < PTRDIFF_MAX) ? _allocator.max_size() : PTRDIFF_MAX);}
 	size_type capacity() const {return (_capacity);}
 	void reserve(size_type n)
 	{
@@ -254,6 +254,8 @@ public:
     void insert (iterator position, ST n, const value_type& val, typename ft::enable_if<ft::is_integral< ST >::value, ST>::type* = 0)
 	{
 		size_type	index = position - begin();
+		if (n == 0)
+			return ;
 		if (_size + n > _capacity * 2)
 			reserve(_capacity + n);
 		else if(_size + n > _capacity)
@@ -287,23 +289,22 @@ public:
 	void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral< InputIterator >::value, InputIterator>::type* = 0)
 	{
 		size_type	index = position - begin(); //! dhddjiu
-		size_type	n = size_it(first, last);
+		vector tem(first, last);
 		if (_capacity == 0)
-			reserve(n);
-		else if (_size + n > _capacity * 2)
-			reserve(_capacity + n);
-		else if (_size + n > _capacity)
+			reserve(tem.size());
+		else if (_size + tem.size() > _capacity * 2)
+			reserve(_capacity + tem.size());
+		else if (_size + tem.size() > _capacity)
 			reserve(_capacity * 2);
-		// std::cout<<_size<<" "<<index<<" "<<n<<" "<<_capacity<<" we\n";
 		if (_size)
 			for (size_t i = _size; i > index; i--)
 			{
-				_allocator.construct(_arr + i + n - 1, _arr[i - 1]);
+				_allocator.construct(_arr + i + tem.size() - 1, _arr[i - 1]);
 				_allocator.destroy(_arr + i -1);
 			}
-		for (;  first != last; first++, index++)
-			_allocator.construct(_arr + index, *first);
-		_size += n;
+		for (vector::iterator c = tem.begin();  c != tem.end(); c++, index++)
+			_allocator.construct(_arr + index, *c);
+		_size += tem.size();
 	}
 	void resize(size_type n, T c = T())
 	{
@@ -331,7 +332,7 @@ public:
 
 	void pop_back()
 	{
-		_allocator.destroy(_arr + _size);
+		_allocator.destroy(_arr + _size - 1);
 		_size--;
 	}
 
@@ -378,6 +379,11 @@ public:
 	}
 
 };
+
+	template <class T, class Alloc>  void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
+	{
+		x.swap(y);
+	}
 
 	template <class T, class Allocator> bool operator==(const vector<T,Allocator>& x, const vector<T,Allocator>& y)
 	{

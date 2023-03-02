@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/02 11:30:55 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/02 15:28:01 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -245,19 +245,26 @@ int maizn()
 
 int main()
 {
-   int arr[150];
-   for (size_t i = 0; i < 150; i++)
+   int arr[25];
+   for (size_t i = 0; i < 25; i++)
    {
       arr[i] = i;
    }
    
-   ft::vector<int> a(arr, arr + 150);
-   a.erase(a.end(), a.end());
+   ft::vector<int> a(arr, arr + 25);
+   // a.erase(a.end(), a.end());
+   // ft::vector<int>::reverse_iterator s;
+   // s = a.rbegin() + 25;
+   // ++s;
    // a.erase(a.begin(), a.begin());
+   // std::cout<<*s<<std::endl;
+   a.insert(a.begin(), 0, 0);
    for (ft::vector<int>::iterator i = a.begin(); i != a.end(); i++)
    {
-      std::cout<<*i<<"\t";
+      std::cout<<*i<<std::endl;
    }
    
+   // if (s+1 < s)
+   //    std::cout<<"yesss\n";
    
 }

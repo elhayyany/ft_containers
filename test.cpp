@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/06 14:43:15 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/06 17:45:18 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 #include <cmath>
 #include <map>
 #include "map/map.hpp"
+#include "set/set.hpp"
 #include "stack/stack.hpp"
 #include <iostream>
 #include <algorithm>
@@ -313,28 +314,10 @@ void maina()
 }
 int main()
 {
-   ft::vector<int> v;
-   for (size_t i = 0; i < 200; i++)
-   {
-      v.push_back(i);
-   }
-   ft::vector<int>::reverse_iterator   it  =  v.rbegin() + 50;
-   ft::vector<int>::const_reverse_iterator   cit  = v.rbegin() + 50;
-
-   // std::cout<<*b--<<std::endl;
-
-   --it;
-   it--;
-   it--;
-   --cit;
-   --cit;
-   cit--;
-   std::cout<< (*(it + 6))<<std::endl;
-   std::cout<< (*(42 + it))<<std::endl;
-   std::cout<< (*(42 + it - 3))<<std::endl;
-   std::cout<< (*(v.rend() - 6))<<std::endl;
-   std::cout<< (*(cit - 6))<<std::endl;
-   std::cout<< (*(cit + 7))<<std::endl;
-   std::cout<< (v.rend() - v.rbegin())<<std::endl;
+   ft::map<int, int> a;
+   ft::map<int, int>::iterator b;
+   ft::map<int, int>::const_iterator c(a.begin());
+   ft::map<int, int>::iterator d(c);
+   
    // maina();
 }

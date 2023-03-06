@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 18:26:39 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/05 18:32:04 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/06 13:32:03 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,10 @@ public:
 	reference	operator * ()
 	{
 		return (*_ptr);
+	}
+	pointer	operator -> ()
+	{
+		return (_ptr);
 	}
 	template <class itt> bool operator < (const vector_iterator<itt>& other)
 	{

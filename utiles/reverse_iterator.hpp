@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 09:32:06 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/06 11:36:57 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/06 14:36:01 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,12 @@ public:
 	{
 		it	tem(It);
 		return (*--tem);
-		// return (*It);
 	}
 	pointer	operator -> ()
 	{
-		return (It.operator->());
+		it tem(It);
+		--tem;
+		return (tem.operator->());
 	}
 	template<class itt> bool operator > (const reverse_iterator<itt>& other)
 	{
@@ -137,7 +138,7 @@ public:
 	}
 	reference operator [] (difference_type a)
 	{
-		return (*(It - a));
+		return (It[-a - 1]);
 	}
 private:
 	it		It;
@@ -145,8 +146,8 @@ private:
 	template<typename T>
 	reverse_iterator<T> operator + (typename reverse_iterator<T>::difference_type a, reverse_iterator<T>& t )
 	{
-		reverse_iterator<T> k(t);
-		k += a;
+		reverse_iterator<T> k(t.base() - a);
+		// k += a;
 		return (k);
 	}
 }

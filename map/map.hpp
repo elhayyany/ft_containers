@@ -121,9 +121,7 @@ public:
 	iterator					end() 
 	{
 		iterator	ij = iterator(__get_rightest(_root), 0);
-		// std::cout<<"end ÷befor ++: "<<ij.base()<<"   "<<(*ij).first<<std::endl;
 		++ij;
-		// std::cout<<"end after +÷+: "<<ij.base()<<"   "<<(*ij).first<<std::endl;
 		return (ij);
 	}
 	const_iterator				end() const 
@@ -134,26 +132,27 @@ public:
 	}
 	reverse_iterator			rbegin()
 	{
-		reverse_iterator	ij(iterator(__get_rightest(_root), 0));
-		return (ij);
+		return (reverse_iterator(end()));
 	}
 	const_reverse_iterator		rbegin() const
 	{
-		const_reverse_iterator	ij = const_reverse_iterator(iterator(_root));
-		ij++;
-		return (ij);
+		return (const_reverse_iterator(end()));
+		// const_reverse_iterator	ij = const_reverse_iterator(iterator(_root));
+		// ij++;
+		// return (ij);
 	}
 	reverse_iterator			rend()
 	{
+		return reverse_iterator(begin());
 		reverse_iterator	ij = reverse_iterator(iterator(_root));
-		ij++;
-		return (ij);
+		// ij++;
+		// return (ij);
 	}
 	const_reverse_iterator		rend() const
 	{
-		const_reverse_iterator	ij = const_reverse_iterator(iterator(_root));
-		ij++;
-		return (ij);
+		return const_reverse_iterator(begin());	//ij = const_reverse_iterator(iterator(_root));
+		// ij++;
+		// return (ij) ;
 	}
 
 //! ////////////////////
@@ -215,7 +214,7 @@ public:
 		ft::pair<t_node *, bool> to_return = __add_node_to_BST_returnIT(val);
 		// std::cout<<"root is "<<_root->val->first<<std::endl;
 		if (!to_return.second){
-			return (ft::pair<iterator, bool>(iterator(to_return.first), 0));}
+			return (ft::pair<iterator, bool>(iterator(to_return.first, 1), 0));}
 		// std::cout<<_size<<"             s  s        \n";
 		_size++;
 		t_node	*node = to_return.first;
@@ -264,7 +263,7 @@ public:
 		// if (to_return.first->parent)
 		// 	std::cout<<"node parent color is: "<< to_return.first->parent->color<<"  and its val is  "<<to_return.first->parent->val->first <<std::endl;
 		// std::cout<<"-----------------enserd "<<to_return.first->val->first<<std::endl;
-		return (ft::pair<iterator, bool>(iterator(to_return.first), 1));
+		return (ft::pair<iterator, bool>(iterator(to_return.first, 1), 1));
 	}
 	iterator insert (iterator position, const value_type& val)
 	{

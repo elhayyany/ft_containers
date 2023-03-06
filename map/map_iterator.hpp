@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/20 11:15:52 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/05 18:36:26 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/06 15:59:48 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #define MAP_ITERATOR_HPP
 
 #include "../utiles/reverse_iterator.hpp"
-// #include "m÷ap.hpp"
 #include "../utiles/pair.hpp"
 
 namespace ft
@@ -24,39 +23,6 @@ namespace ft
 
 
 //! /////////////////////////////////???////////////?????????????
-
-
-
-
-// template< class T >
-// struct iterator_traits
-// {
-// 	typedef typename T::iterator_category			 	iterator_category;
-// 	typedef typename T::value_type						value_type;
-// 	typedef typename T::difference_type			 		difference_type;
-// 	typedef typename T::pointer							pointer;
-// 	typedef typename T::reference						reference;
-	
-// };
-// template< class T >
-// struct iterator_traits<T*>
-// {
-// 	typedef std::bidirectional_iterator_tag 			iterator_category;
-// 	typedef T                          					value_type;
-// 	typedef std::ptrdiff_t                  			difference_type;
-// 	typedef T*                         					pointer;
-// 	typedef T&                         					reference;
-// };
-// template< class T >
-// struct iterator_traits<const T*>
-// {
-// 	typedef std::bidirectional_iterator_tag 			iterator_category;
-// 	typedef T                          					value_type;
-// 	typedef std::ptrdiff_t                  			difference_type;
-// 	typedef const	T*                         			pointer;
-// 	typedef const	T&                         			reference;
-
-// };
 
 
 
@@ -77,11 +43,11 @@ public:
 	map_iterator(): _root(NULL), _root_tem(NULL) {}
 	map_iterator(const _NodePtr node) {_root = _get_left(node); _root_tem = _root;}
 	map_iterator(_NodePtr node, bool i): _root(node), _root_tem(node) {i = false;}
-	template<class A, class B, class C, class D, class E> map_iterator(const map_iterator<A, B, C, D, E>& it) : _root(it.base()), _root_tem(_root) {}
+	template<class A, class B, class C, class D, class E> map_iterator(const map_iterator<A, B, C, D, E>& it) : _root(it.base()), _root_tem(it.base_tem()) {}
 	template<class A, class B, class C, class D, class E> map_iterator<key, T, _NodePtr, Compare, val>&	operator=(const map_iterator<A, B, C, D, E>& it)
 	{
 		_root = it.base();
-		_root_tem = _root;
+		_root_tem = it.base_tem();
 		return (*this);	
 	}
 
@@ -120,7 +86,7 @@ public:
 				_root = _root->parent;
 		}
 		else
-			_root = _root_tem;;
+			_root = _root_tem;
 		_root_tem = _root;
 		return (*this);
 	}
@@ -132,6 +98,7 @@ public:
 	}
 
 	const _NodePtr base() const {return (_root);}
+	const _NodePtr base_tem() const {return (_root_tem);}
 
 	ft::pair<const key, T>&	operator*()  { return ((*_root->val)); }
 	ft::pair<const key, T>*	operator->() { return (_root->val); }
@@ -176,7 +143,3 @@ protected:
 
 
 
-// ('strmap::const_iterator')
-// 'map_iterator<std::__1::basic_string<char>, std::__1::basic_string<char>, const ft::map<std::__1::basic_string<char>, std::__1::basic_string<char>, std::__1::less<std::__1::basic_string<char> >, track_allocator<ft::pair<const std::__1::basic_string<char>, std::__1::basic_string<char> > > >::t_node *, std::__1::less<std::__1::basic_string<char> > >'
-// 'ft::map<std::__1::basic_string<char>, std::__1::basic_string<char>, std::__1::less<std::__1::basic_string<char> >, track_allocator<ft::pair<const std::__1::basic_string<char>, std::__1::basic_string<char> > > >::iterator'
-// 'map_iterator<std::__1::basic_string<char>, std::__1::basic_string<char>, ft::map<std::__1::basic_string<char>, std::__1::basic_string<char>, std::__1::less<std::__1::basic_string<char> >, track_allocator<ft::pair<const std::__1::basic_string<char>, std::__1::basic_string<char> > > >::t_node *, std::__1::less<std::__1::basic_string<char> > >')

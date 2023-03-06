@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/06 11:24:20 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/06 14:32:33 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,10 @@ public:
 	iterator begin() { return (iterator(_arr)); }													//!	begin iterator
 	iterator end() { return (iterator(_arr + _size)); }												//! end iterator 
 	const_iterator end() const { return (const_iterator(_arr + _size)); }							//! const end iterator
-	reverse_iterator rbegin() { return(reverse_iterator(end() - 1)); }						//! reverse begin iterator
-	const_reverse_iterator rbegin() const { return(const_reverse_iterator(end() - 1)); }		//! const reverse begin iterator
-	reverse_iterator rend() { return(reverse_iterator(begin() - 1)); }									//! reverse end iterator
-	const_reverse_iterator rend() const { return(const_reverse_iterator(begin() - 1)); }				//! const reverse end iterator
+	reverse_iterator rbegin() { return(reverse_iterator(end())); }						//! reverse begin iterator
+	const_reverse_iterator rbegin() const { return(const_reverse_iterator(end())); }		//! const reverse begin iterator
+	reverse_iterator rend() { return(reverse_iterator(begin())); }									//! reverse end iterator
+	const_reverse_iterator rend() const { return(const_reverse_iterator(begin())); }				//! const reverse end iterator
 
 
 

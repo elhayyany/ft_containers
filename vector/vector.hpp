@@ -6,7 +6,7 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 12:00:07 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/02 15:39:40 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/06 11:24:20 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@
 #include <memory>
 #include <exception>
 #include "vector_iterator.hpp"
-#include "vector_reverse_iterator.hpp"
+// #include "vector_reverse_iterator.hpp"
+#include "/Users/ael-hayy/Desktop/ft_containers/utiles/reverse_iterator.hpp"
 #include "../utiles/pair.hpp"
 namespace ft
 {
@@ -26,18 +27,18 @@ class vector
 {
 
 public:
-	typedef				T											value_type;
-	typedef				Allocator									allocator_type;
-	typedef	typename	allocator_type::reference					reference;
-	typedef typename	allocator_type::const_reference				const_reference;
-	typedef typename	allocator_type::pointer						pointer;
-    typedef typename	allocator_type::const_pointer				const_pointer;
-	typedef typename	allocator_type::size_type					size_type;
-	typedef typename	allocator_type::difference_type				difference_type;
-	typedef				vector_iterator<pointer>					iterator;
-	typedef				vector_iterator<const_pointer>				const_iterator;
-	typedef				vector_reverse_iterator<pointer>			reverse_iterator;
-	typedef				vector_reverse_iterator<const_pointer>		const_reverse_iterator;
+	typedef				T												value_type;
+	typedef				Allocator										allocator_type;
+	typedef	typename	allocator_type::reference						reference;
+	typedef typename	allocator_type::const_reference					const_reference;
+	typedef typename	allocator_type::pointer							pointer;
+    typedef typename	allocator_type::const_pointer					const_pointer;
+	typedef typename	allocator_type::size_type						size_type;
+	typedef typename	allocator_type::difference_type					difference_type;
+	typedef				vector_iterator<value_type>						iterator;
+	typedef				vector_iterator<const value_type>					const_iterator;
+	typedef				ft::reverse_iterator<iterator>					reverse_iterator;
+	typedef				ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 
 private:
 size_type		_size;
@@ -78,10 +79,10 @@ public:
 	iterator begin() { return (iterator(_arr)); }													//!	begin iterator
 	iterator end() { return (iterator(_arr + _size)); }												//! end iterator 
 	const_iterator end() const { return (const_iterator(_arr + _size)); }							//! const end iterator
-	reverse_iterator rbegin() { return(reverse_iterator(_arr + _size - 1)); }						//! reverse begin iterator
-	const_reverse_iterator rbegin() const { return(const_reverse_iterator(_arr + _size - 1)); }		//! const reverse begin iterator
-	reverse_iterator rend() { return(reverse_iterator(_arr - 1)); }									//! reverse end iterator
-	const_reverse_iterator rend() const { return(const_reverse_iterator(_arr - 1)); }				//! const reverse end iterator
+	reverse_iterator rbegin() { return(reverse_iterator(end() - 1)); }						//! reverse begin iterator
+	const_reverse_iterator rbegin() const { return(const_reverse_iterator(end() - 1)); }		//! const reverse begin iterator
+	reverse_iterator rend() { return(reverse_iterator(begin() - 1)); }									//! reverse end iterator
+	const_reverse_iterator rend() const { return(const_reverse_iterator(begin() - 1)); }				//! const reverse end iterator
 
 
 
@@ -354,6 +355,8 @@ public:
 		difference_type	tem = last - first;
 		size_type	index = first - begin();
 		size_type	lst = last - begin();
+		if (!tem)
+			return (first);
 		for (size_type i = index, j = 0; j < _size; j++, i++)
 		{
 			if (j + lst < _size){

@@ -6,13 +6,14 @@
 /*   By: ael-hayy <ael-hayy@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 11:02:24 by ael-hayy          #+#    #+#             */
-/*   Updated: 2023/03/02 15:28:01 by ael-hayy         ###   ########.fr       */
+/*   Updated: 2023/03/05 11:17:41 by ael-hayy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <cstdlib>
 #include <iostream>
 #include <time.h>
+#include <ctime>
 #include <map>
 #include <stack>
 #include <iostream>
@@ -242,29 +243,98 @@ int maizn()
 
 
 
+//284 76 122 463 429 212 154 140 293 419 430 245 43 269 334 381 231 298 176 46 335 78 223 127
+void maina()
+{
+   ft::pair<int, int> s[100];
+   srand(time(0));
+   for (size_t i = 0; i < 100; i++)
+      s[i].first = rand() % 500  , s[i].second = i, std::cout<<s[i].first<<" ";
+   std::cout<<std::endl;
+   ft::map<int, int> m(s, s + 100);
+   // m.print();
+   ft::map<int, int>::iterator it = m.begin() ;
 
+
+      m.erase(it);
+
+      it = m.begin();
+
+      std::advance(it, 21);
+
+      m.erase(it);
+
+      it = m.end();
+
+      std::advance(it, -10);
+
+      m.erase(it);
+
+      it = m.end();
+
+      std::advance(it, -3);
+
+      m.erase(it);
+// exit(0);
+
+      it = m.end();
+
+      std::advance(it, -1);
+      m.erase(it);
+
+      it = m.begin();
+
+      std::advance(it, 1);
+
+      m.erase(it);
+      for (it = m.begin(); it != m.end(); it = m.begin())
+      {
+         m.erase(it);
+         // PRINT_ALL(m);
+      }
+      std::cout<<m.size()<<std::endl;
+   // ft::map<int, int> a;
+   // for (size_t i = 0; i < 4; i++)
+   // {
+   //    a.insert(ft::make_pair(i,i));
+   // }
+   // ft::map<int, int>::iterator b = a.begin(), c;
+   // // for (size_t i = 0; i < 4; i++)
+   // // {
+   //    c = a.erase(b);
+   // // }
+   // std::cout<<c->first<<std::endl;
+   // c = a.end();
+   // std::advance(c, -1);
+   // // c--;
+   // a.erase(c);
+   // // std::cout<<c->first<<std::endl;
+   
+}
 int main()
 {
-   int arr[25];
-   for (size_t i = 0; i < 25; i++)
+   ft::vector<int> v;
+   for (size_t i = 0; i < 200; i++)
    {
-      arr[i] = i;
+      v.push_back(i);
    }
-   
-   ft::vector<int> a(arr, arr + 25);
-   // a.erase(a.end(), a.end());
-   // ft::vector<int>::reverse_iterator s;
-   // s = a.rbegin() + 25;
-   // ++s;
-   // a.erase(a.begin(), a.begin());
-   // std::cout<<*s<<std::endl;
-   a.insert(a.begin(), 0, 0);
-   for (ft::vector<int>::iterator i = a.begin(); i != a.end(); i++)
-   {
-      std::cout<<*i<<std::endl;
-   }
-   
-   // if (s+1 < s)
-   //    std::cout<<"yesss\n";
-   
+   ft::vector<int>::reverse_iterator   it  =  v.rbegin() + 50;
+   ft::vector<int>::const_reverse_iterator   cit  = v.rbegin() + 50;
+
+   // std::cout<<*b--<<std::endl;
+
+   --it;
+   it--;
+   it--;
+   --cit;
+   --cit;
+   cit--;
+   std::cout<< (*(it + 6))<<std::endl;
+   std::cout<< (*(42 + it))<<std::endl;
+   std::cout<< (*(42 + it - 3))<<std::endl;
+   std::cout<< (*(v.rend() - 6))<<std::endl;
+   std::cout<< (*(cit - 6))<<std::endl;
+   std::cout<< (*(cit + 7))<<std::endl;
+   std::cout<< (v.rend() - v.rbegin())<<std::endl;
+   // maina();
 }
